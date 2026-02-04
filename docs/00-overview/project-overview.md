@@ -1,12 +1,17 @@
-# Visão Geral do Projeto
+# Project Overview - Gateiro App
 
-## Problema
-Donos de gatos têm dificuldade em organizar informações de saúde, alimentação e rotina dos pets.
+## O que é o Gateiro App?
+Aplicação mobile para ajudar donos de gatos a organizar informações de saúde, rotina e cuidados dos seus pets.
 
-## Solução
-Um aplicativo mobile focado em organização e lembretes inteligentes para gateiros.
+## Objetivos
+- Centralizar informações dos gatos
+- Reduzir esquecimentos de cuidados importantes
+- Facilitar acompanhamento da saúde do pet
 
 ## Público-alvo
 - Donos de gatos
 - Famílias com múltiplos gatos
-- Pessoas que desejam acompanhar a saúde do pet
+- Gateiros iniciantes e experientes
+
+## Status Atual
+Em fase de modelagem de domínio e definição de produto.
