@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { typography } from '@/theme/typography'
 import { colors } from '@/theme/colors'
+import ScreenContainer from '@/components/ScreenContainer'
+import Header from '@/components/Header'
 
 export default function AddPetScreen() {
   const [name, setName] = useState('')
@@ -19,17 +21,14 @@ export default function AddPetScreen() {
   }
 
   return (
-    <View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-        <Ionicons name="paw-outline" size={20} color={colors.accentPurple} style={{ marginRight: 8 }} />
-        <Text style={typography.subtitle}>Novo pet</Text>
-      </View>
+    <ScreenContainer variant="form">
+      <Header icon="paw-outline" title="Novo pet" />
       <TextInput
         placeholder="Nome do pet"
         value={name}
         onChangeText={setName}
       />
       <Button title="Salvar" onPress={handleSave} />
-    </View>
+    </ScreenContainer>
   )
 }
