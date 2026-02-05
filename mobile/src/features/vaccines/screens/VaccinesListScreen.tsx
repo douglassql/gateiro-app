@@ -8,6 +8,17 @@ export default function VaccinesListScreen() {
   const { pets } = usePets()
   const [selectedPetId, setSelectedPetId] = useState<number | null>(null)
 
+  function parseDateSafe(d?: string) {
+    if (!d) return null
+    const date = new Date(d)
+    return isNaN(date.getTime()) ? null : date
+  }
+
+  function formatDate(d?: string) {
+    const date = parseDateSafe(d)
+    return date ? date.toLocaleDateString('pt-BR') : d
+  }
+
   return (
     <View>
       <FlatList
@@ -37,11 +48,19 @@ export default function VaccinesListScreen() {
       />
 
       <FlatList
-        data={
-          selectedPetId
-            ? vaccines.filter(v => v.pet_id === selectedPetId)
-            : vaccines
-        }
+        data={(selectedPetId
+          ? vaccines.filter(v => v.pet_id === selectedPetId)
+          : vaccines
+        )
+          .slice()
+          .sort((a, b) => {
+            const ad = parseDateSafe(a.next_date)
+            const bd = parseDateSafe(b.next_date)
+            if (ad && bd) return ad.getTime() - bd.getTime()
+            if (ad && !bd) return -1
+            if (!ad && bd) return 1
+            return 0
+          })}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <View style={{ padding: 12, borderBottomWidth: 1 }}>
@@ -51,10 +70,10 @@ export default function VaccinesListScreen() {
               return pet ? <Text style={{ color: '#333' }}>Pet: {pet.name}</Text> : null
             })()}
             {item.next_date ? (
-              <Text style={{ color: '#555' }}>Próxima: {item.next_date}</Text>
+              <Text style={{ color: '#555' }}>Próxima: {formatDate(item.next_date)}</Text>
             ) : null}
             {item.notes ? (
-              <Text style={{ color: '#777' }}>{item.notes}</Text>
+              <Text style={{ color: '#777' }}>Notas: {item.notes}</Text>
             ) : null}
           </View>
         )}
