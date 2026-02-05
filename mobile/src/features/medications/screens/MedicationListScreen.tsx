@@ -1,8 +1,13 @@
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
 import { useMedications } from "../hooks/useMedications";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "@/navigation/types";
+import { MedicationRepository } from "@/database/repositories/MedicationRepository";
 
 export default function MedicationListScreen() {
-  const { medications } = useMedications();
+  const { medications, reload } = useMedications();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
     <View>
@@ -17,6 +22,36 @@ export default function MedicationListScreen() {
             }}
           >
             <Text style={{ fontSize: 16 }}>💊 {item.name}</Text>
+            <View style={{ flexDirection: "row", marginTop: 8 }}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("EditMedication", { id: item.id! })}
+                style={{ padding: 6, borderWidth: 1, borderRadius: 6, marginRight: 8 }}
+              >
+                <Text>Editar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  Alert.alert(
+                    "Excluir medicamento",
+                    "Tem certeza que deseja excluir este registro?",
+                    [
+                      { text: "Cancelar", style: "cancel" },
+                      {
+                        text: "Excluir",
+                        style: "destructive",
+                        onPress: () => {
+                          MedicationRepository.deleteById(item.id as number);
+                          (reload as () => void)();
+                        },
+                      },
+                    ]
+                  );
+                }}
+                style={{ padding: 6, borderWidth: 1, borderRadius: 6 }}
+              >
+                <Text>Excluir</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
       />
