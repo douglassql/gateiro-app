@@ -8,6 +8,8 @@ import MedicationListScreen from '../features/medications/screens/MedicationList
 import AddMedicationScreen from '../features/medications/screens/AddMedicationScreen'
 import PetsListScreen from '../features/pets/screens/PetsListScreen'
 import AddPetScreen from '../features/pets/screens/AddPetScreen'
+import VaccinesListScreen from '../features/vaccines/screens/VaccinesListScreen'
+import AddVaccineScreen from '../features/vaccines/screens/AddVaccineScreen'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -40,6 +42,16 @@ export default function AppNavigator() {
         <Stack.Screen
           name="AddPet"
           component={AddPetScreen}
+        />
+
+        <Stack.Screen
+          name="Vaccines"
+          component={VaccinesListScreen}
+        />
+
+        <Stack.Screen
+          name="AddVaccine"
+          component={AddVaccineScreen}
         />
 
       </Stack.Navigator>
