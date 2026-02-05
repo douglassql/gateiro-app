@@ -7,13 +7,14 @@ import { PetRepository } from '@/database/repositories/PetRepository'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { colors } from '@/theme/colors'
 import FAB from '@/components/FAB'
+import ScreenContainer from '@/components/ScreenContainer'
 
 export default function PetsListScreen() {
   const { pets, reload } = usePets()
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
   return (
-    <View style={{ flex: 1 }}>
+    <ScreenContainer variant="list">
       <FlatList
         data={pets}
         keyExtractor={(item) => String(item.id)}
@@ -63,6 +64,6 @@ export default function PetsListScreen() {
         )}
       />
       <FAB onPress={() => navigation.navigate('AddPet')} />
-    </View>
+    </ScreenContainer>
   )
 }
