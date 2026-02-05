@@ -3,14 +3,18 @@ import { useVaccines } from '../hooks/useVaccines'
 import { usePets } from '@/features/pets/hooks/usePets'
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { RootStackParamList } from '@/navigation/types'
 import { VaccineRepository } from '@/database/repositories/VaccineRepository'
 
+type NavigationProps =
+  NativeStackNavigationProp<RootStackParamList>
+
 export default function VaccinesListScreen() {
-  const { vaccines } = useVaccines()
+  const { vaccines, reload } = useVaccines()
   const { pets } = usePets()
   const [selectedPetId, setSelectedPetId] = useState<number | null>(null)
-  const navigation = useNavigation()
-  const { reload } = useVaccines()
+  const navigation = useNavigation<NavigationProps>()
 
   function parseDateSafe(d?: string) {
     if (!d) return null
@@ -81,7 +85,7 @@ export default function VaccinesListScreen() {
             ) : null}
             <View style={{ flexDirection: 'row', marginTop: 8 }}>
               <TouchableOpacity
-                onPress={() => navigation.navigate('EditVaccine' as never, { id: item.id } as never)}
+                onPress={() => navigation.navigate('EditVaccine', { id: item.id! })}
                 style={{ padding: 6, borderWidth: 1, borderRadius: 6, marginRight: 8 }}
               >
                 <Text>Editar</Text>

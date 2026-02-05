@@ -22,8 +22,8 @@ export const VaccineRepository = {
   },
 
   findById(id: number): Vaccine | null {
-    const rows = db.getAllSync('SELECT * FROM vaccines WHERE id = ?', [id])
-    return rows[0] ?? null
+    const rows = db.getAllSync('SELECT * FROM vaccines WHERE id = ?', [id]) as Vaccine[]
+    return (rows[0] ?? null) as Vaccine | null
   },
 
   update(vac: Vaccine) {
