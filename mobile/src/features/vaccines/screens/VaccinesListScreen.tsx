@@ -2,11 +2,15 @@ import { View, Text, FlatList, TouchableOpacity } from 'react-native'
 import { useVaccines } from '../hooks/useVaccines'
 import { usePets } from '@/features/pets/hooks/usePets'
 import { useState } from 'react'
+import { useNavigation } from '@react-navigation/native'
+import { VaccineRepository } from '@/database/repositories/VaccineRepository'
 
 export default function VaccinesListScreen() {
   const { vaccines } = useVaccines()
   const { pets } = usePets()
   const [selectedPetId, setSelectedPetId] = useState<number | null>(null)
+  const navigation = useNavigation()
+  const { reload } = useVaccines()
 
   function parseDateSafe(d?: string) {
     if (!d) return null
@@ -75,6 +79,23 @@ export default function VaccinesListScreen() {
             {item.notes ? (
               <Text style={{ color: '#777' }}>Notas: {item.notes}</Text>
             ) : null}
+            <View style={{ flexDirection: 'row', marginTop: 8 }}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('EditVaccine' as never, { id: item.id } as never)}
+                style={{ padding: 6, borderWidth: 1, borderRadius: 6, marginRight: 8 }}
+              >
+                <Text>Editar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  VaccineRepository.deleteById(item.id as number)
+                  ;(reload as () => void)()
+                }}
+                style={{ padding: 6, borderWidth: 1, borderRadius: 6 }}
+              >
+                <Text>Excluir</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         )}
       />
