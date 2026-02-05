@@ -4,10 +4,14 @@ import { RootStackParamList } from './types'
 
 
 import HomeScreen from '../screens/HomeScreen'
+import MenuScreen from '../screens/MenuScreen'
 import MedicationListScreen from '../features/medications/screens/MedicationListScreen'
 import AddMedicationScreen from '../features/medications/screens/AddMedicationScreen'
+import EditMedicationScreen from '../features/medications/screens/EditMedicationScreen'
 import PetsListScreen from '../features/pets/screens/PetsListScreen'
 import AddPetScreen from '../features/pets/screens/AddPetScreen'
+import EditPetScreen from '../features/pets/screens/EditPetScreen'
+import PetDetailScreen from '../features/pets/screens/PetDetailScreen'
 import VaccinesListScreen from '../features/vaccines/screens/VaccinesListScreen'
 import AddVaccineScreen from '../features/vaccines/screens/AddVaccineScreen'
 import EditVaccineScreen from '../features/vaccines/screens/EditVaccineScreen'
@@ -26,6 +30,11 @@ export default function AppNavigator() {
         />
 
         <Stack.Screen
+          name="Menu"
+          component={MenuScreen}
+        />
+
+        <Stack.Screen
           name="Medications"
           component={MedicationListScreen}
         />
@@ -36,6 +45,11 @@ export default function AppNavigator() {
         />
 
         <Stack.Screen
+          name="EditMedication"
+          component={EditMedicationScreen}
+        />
+
+        <Stack.Screen
           name="Pets"
           component={PetsListScreen}
         />
@@ -43,6 +57,16 @@ export default function AppNavigator() {
         <Stack.Screen
           name="AddPet"
           component={AddPetScreen}
+        />
+
+        <Stack.Screen
+          name="EditPet"
+          component={EditPetScreen}
+        />
+
+        <Stack.Screen
+          name="PetDetail"
+          component={PetDetailScreen}
         />
 
         <Stack.Screen
