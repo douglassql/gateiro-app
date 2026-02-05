@@ -6,4 +6,5 @@ export type RootStackParamList = {
   AddPet: undefined
   Vaccines: undefined
   AddVaccine: undefined
+  EditVaccine: { id: number }
 }
