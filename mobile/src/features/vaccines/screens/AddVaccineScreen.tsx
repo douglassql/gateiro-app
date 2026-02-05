@@ -65,6 +65,8 @@ export default function AddVaccineScreen() {
         placeholder="Próxima data (ISO opcional)"
         value={nextDate}
         onChangeText={setNextDate}
+        autoCapitalize="none"
+        autoCorrect={false}
       />
 
       <View style={{ height: 8 }} />
@@ -73,6 +75,8 @@ export default function AddVaccineScreen() {
         placeholder="Notas (opcional)"
         value={notes}
         onChangeText={setNotes}
+        multiline
+        numberOfLines={3}
       />
 
       <View style={{ height: 12 }} />
