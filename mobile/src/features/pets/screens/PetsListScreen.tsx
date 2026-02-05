@@ -4,6 +4,8 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '@/navigation/types'
 import { PetRepository } from '@/database/repositories/PetRepository'
+import Ionicons from '@expo/vector-icons/Ionicons'
+import { colors } from '@/theme/colors'
 
 export default function PetsListScreen() {
   const { pets, reload } = usePets()
@@ -16,8 +18,9 @@ export default function PetsListScreen() {
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <View style={{ padding: 12, borderBottomWidth: 1 }}>
-            <TouchableOpacity onPress={() => navigation.navigate('PetDetail', { id: item.id! })}>
-              <Text style={{ fontSize: 16 }}>🐱 {item.name}</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('PetDetail', { id: item.id! })} style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Ionicons name="paw-outline" size={18} color={colors.accentPurple} style={{ marginRight: 8 }} />
+              <Text style={{ fontSize: 16 }}>{item.name}</Text>
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', marginTop: 8 }}>
               <TouchableOpacity

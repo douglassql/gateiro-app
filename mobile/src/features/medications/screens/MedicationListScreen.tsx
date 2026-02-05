@@ -4,6 +4,8 @@ import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/navigation/types";
 import { MedicationRepository } from "@/database/repositories/MedicationRepository";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { colors } from "@/theme/colors";
 
 export default function MedicationListScreen() {
   const { medications, reload } = useMedications();
@@ -21,7 +23,10 @@ export default function MedicationListScreen() {
               borderBottomWidth: 1,
             }}
           >
-            <Text style={{ fontSize: 16 }}>💊 {item.name}</Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicons name="medkit-outline" size={18} color={colors.accentPurple} style={{ marginRight: 8 }} />
+              <Text style={{ fontSize: 16 }}>{item.name}</Text>
+            </View>
             <View style={{ flexDirection: "row", marginTop: 8 }}>
               <TouchableOpacity
                 onPress={() => navigation.navigate("EditMedication", { id: item.id! })}

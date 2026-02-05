@@ -1,30 +1,32 @@
 import { Text, TouchableOpacity, View } from 'react-native'
+import Ionicons from '@expo/vector-icons/Ionicons'
+import { colors } from '@/theme/colors'
 
 type Props = {
   title: string
   subtitle?: string
-  emoji?: string
+  iconName?: string
   onPress: () => void
 }
 
-export default function CardButton({ title, subtitle, emoji, onPress }: Props) {
+export default function CardButton({ title, subtitle, iconName, onPress }: Props) {
   return (
     <TouchableOpacity
       onPress={onPress}
       style={{
         padding: 16,
         borderWidth: 1,
-        borderColor: '#C9B5AF',
+        borderColor: colors.border,
         borderRadius: 16,
-        backgroundColor: '#F6EFEA'
+        backgroundColor: colors.card
       }}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        {emoji ? <Text style={{ fontSize: 24, marginRight: 12 }}>{emoji}</Text> : null}
+        {iconName ? <Ionicons name={iconName as any} size={24} color={colors.accentPurple} style={{ marginRight: 12 }} /> : null}
         <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: 16, color: '#3C2C2C' }}>{title}</Text>
+          <Text style={{ fontSize: 16, color: colors.primaryText }}>{title}</Text>
           {subtitle ? (
-            <Text style={{ fontSize: 12, color: '#6B5A5A', marginTop: 4 }}>{subtitle}</Text>
+            <Text style={{ fontSize: 12, color: colors.secondaryText, marginTop: 4 }}>{subtitle}</Text>
           ) : null}
         </View>
       </View>

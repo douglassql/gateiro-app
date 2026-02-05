@@ -6,6 +6,8 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '@/navigation/types'
 import { VaccineRepository } from '@/database/repositories/VaccineRepository'
+import Ionicons from '@expo/vector-icons/Ionicons'
+import { colors } from '@/theme/colors'
 
 type NavigationProps =
   NativeStackNavigationProp<RootStackParamList>
@@ -76,7 +78,10 @@ export default function VaccinesListScreen() {
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <View style={{ padding: 12, borderBottomWidth: 1 }}>
-            <Text style={{ fontSize: 16 }}>🛡️ {item.name}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Ionicons name="shield-checkmark-outline" size={18} color={colors.accentPurple} style={{ marginRight: 8 }} />
+              <Text style={{ fontSize: 16 }}>{item.name}</Text>
+            </View>
             {(() => {
               const pet = pets.find(p => p.id === item.pet_id)
               return pet ? <Text style={{ color: '#333' }}>Pet: {pet.name}</Text> : null
