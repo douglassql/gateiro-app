@@ -9,6 +9,7 @@ import { VaccineRepository } from '@/database/repositories/VaccineRepository'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { colors } from '@/theme/colors'
 import FAB from '@/components/FAB'
+import ScreenContainer from '@/components/ScreenContainer'
 
 type NavigationProps =
   NativeStackNavigationProp<RootStackParamList>
@@ -31,7 +32,7 @@ export default function VaccinesListScreen() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <ScreenContainer variant="list">
       <FlatList
         data={pets}
         keyExtractor={(item) => String(item.id)}
@@ -127,6 +128,6 @@ export default function VaccinesListScreen() {
         )}
       />
       <FAB onPress={() => navigation.navigate('AddVaccine')} />
-    </View>
+    </ScreenContainer>
   )
 }
