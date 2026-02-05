@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { typography } from '@/theme/typography'
 import { colors } from '@/theme/colors'
+import ScreenContainer from '@/components/ScreenContainer'
+import Header from '@/components/Header'
 
 export default function AddMedicationScreen() {
   const [name, setName] = useState('')
@@ -22,17 +24,14 @@ export default function AddMedicationScreen() {
   }
 
   return (
-    <View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-        <Ionicons name="medkit-outline" size={20} color={colors.accentPurple} style={{ marginRight: 8 }} />
-        <Text style={typography.subtitle}>Novo medicamento</Text>
-      </View>
+    <ScreenContainer variant="form">
+      <Header icon="medkit-outline" title="Novo medicamento" />
       <TextInput
         placeholder="Nome do medicamento"
         value={name}
         onChangeText={setName}
       />
       <Button title="Salvar" onPress={handleSave} />
-    </View>
+    </ScreenContainer>
   )
 }
