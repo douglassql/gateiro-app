@@ -15,6 +15,8 @@ import PetDetailScreen from '../features/pets/screens/PetDetailScreen'
 import VaccinesListScreen from '../features/vaccines/screens/VaccinesListScreen'
 import AddVaccineScreen from '../features/vaccines/screens/AddVaccineScreen'
 import EditVaccineScreen from '../features/vaccines/screens/EditVaccineScreen'
+import RemindersListScreen from '../features/reminders/screens/RemindersListScreen'
+import AddReminderScreen from '../features/reminders/screens/AddReminderScreen'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -82,6 +84,16 @@ export default function AppNavigator() {
         <Stack.Screen
           name="EditVaccine"
           component={EditVaccineScreen}
+        />
+
+        <Stack.Screen
+          name="Reminders"
+          component={RemindersListScreen}
+        />
+
+        <Stack.Screen
+          name="AddReminder"
+          component={AddReminderScreen}
         />
 
       </Stack.Navigator>

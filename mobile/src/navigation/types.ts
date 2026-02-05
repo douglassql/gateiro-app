@@ -11,4 +11,7 @@ export type RootStackParamList = {
   EditVaccine: { id: number }
   EditPet: { id: number }
   EditMedication: { id: number }
+  Reminders: undefined
+  AddReminder: undefined
+  EditReminder: { id: number }
 }
