@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import AppNavigator from '../navigation/AppNavigator'
 import { runMigrations } from '../database/migrations/init'
-import AppNavigator from '../navigation/AppNavigator'
 
 
 
