@@ -1,4 +1,4 @@
-import { View, Text, FlatList, TouchableOpacity } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native'
 import { useVaccines } from '../hooks/useVaccines'
 import { usePets } from '@/features/pets/hooks/usePets'
 import { useState } from 'react'
@@ -64,10 +64,14 @@ export default function VaccinesListScreen() {
           .sort((a, b) => {
             const ad = parseDateSafe(a.next_date)
             const bd = parseDateSafe(b.next_date)
-            if (ad && bd) return ad.getTime() - bd.getTime()
+            if (ad && bd) {
+              const diff = ad.getTime() - bd.getTime()
+              if (diff !== 0) return diff
+              return a.name.localeCompare(b.name)
+            }
             if (ad && !bd) return -1
             if (!ad && bd) return 1
-            return 0
+            return a.name.localeCompare(b.name)
           })}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
@@ -92,8 +96,21 @@ export default function VaccinesListScreen() {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
-                  VaccineRepository.deleteById(item.id as number)
-                  ;(reload as () => void)()
+                  Alert.alert(
+                    'Excluir vacina',
+                    'Tem certeza que deseja excluir este registro?',
+                    [
+                      { text: 'Cancelar', style: 'cancel' },
+                      {
+                        text: 'Excluir',
+                        style: 'destructive',
+                        onPress: () => {
+                          VaccineRepository.deleteById(item.id as number)
+                          ;(reload as () => void)()
+                        }
+                      }
+                    ]
+                  )
                 }}
                 style={{ padding: 6, borderWidth: 1, borderRadius: 6 }}
               >
