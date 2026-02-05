@@ -4,6 +4,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../navigation/types'
 import { colors } from '@/theme/colors'
 import { typography } from '@/theme/typography'
+import ScreenContainer from '@/components/ScreenContainer'
 
 type NavigationProps =
   NativeStackNavigationProp<RootStackParamList>
@@ -12,35 +13,33 @@ export default function HomeScreen() {
   const navigation = useNavigation<NavigationProps>()
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background, justifyContent: 'center', alignItems: 'center', padding: 24 }}>
-      <View style={{ position: 'absolute', top: -40, left: -30, width: 160, height: 160, borderRadius: 80, backgroundColor: colors.accentOrange, opacity: 0.7 }} />
-      <View style={{ position: 'absolute', bottom: -60, right: -40, width: 220, height: 220, borderRadius: 110, backgroundColor: colors.accentPurple, opacity: 0.5 }} />
-      <View style={{ position: 'absolute', top: 100, right: -60, width: 180, height: 180, borderRadius: 90, borderWidth: 1, borderColor: '#D7C2BD', opacity: 0.6 }} />
+    <ScreenContainer variant="home">
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 }}>
+        <View style={{ width: 240, height: 240, borderRadius: 120, overflow: 'hidden', borderWidth: 6, borderColor: '#FFF', marginBottom: 24 }}>
+          <Image
+            source={{ uri: 'https://images.unsplash.com/photo-1592790331635-35b079a277f1?q=80&w=600&auto=format&fit=crop' }}
+            style={{ width: '100%', height: '100%' }}
+          />
+        </View>
 
-      <View style={{ width: 240, height: 240, borderRadius: 120, overflow: 'hidden', borderWidth: 6, borderColor: '#FFF', marginBottom: 24 }}>
-        <Image
-          source={{ uri: 'https://images.unsplash.com/photo-1592790331635-35b079a277f1?q=80&w=600&auto=format&fit=crop' }}
-          style={{ width: '100%', height: '100%' }}
-        />
+        <Text style={typography.titleLarge}>Gateiro App</Text>
+        <Text style={[typography.body, { textAlign: 'center', marginTop: 8, marginHorizontal: 24 }]}>
+          Organize vacinas, medicamentos e cuidados dos seus gatos com uma interface simples.
+        </Text>
+
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Menu')}
+          style={{
+            marginTop: 24,
+            backgroundColor: colors.primaryText,
+            paddingVertical: 14,
+            paddingHorizontal: 24,
+            borderRadius: 12
+          }}
+        >
+          <Text style={{ color: '#FFF', fontSize: 16 }}>Vamos começar</Text>
+        </TouchableOpacity>
       </View>
-
-      <Text style={typography.titleLarge}>Gateiro App</Text>
-      <Text style={[typography.body, { textAlign: 'center', marginTop: 8, marginHorizontal: 24 }]}>
-        Organize vacinas, medicamentos e cuidados dos seus gatos com uma interface simples.
-      </Text>
-
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Menu')}
-        style={{
-          marginTop: 24,
-          backgroundColor: colors.primaryText,
-          paddingVertical: 14,
-          paddingHorizontal: 24,
-          borderRadius: 12
-        }}
-      >
-        <Text style={{ color: '#FFF', fontSize: 16 }}>Vamos começar</Text>
-      </TouchableOpacity>
-    </View>
+    </ScreenContainer>
   )
 }
