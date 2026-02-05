@@ -6,6 +6,9 @@ export async function scheduleMedicationReminder(date: Date, title: string) {
       title: 'Hora do medicamento 💊',
       body: title
     },
-    trigger: { date }
+    trigger: {
+      type: Notifications.SchedulableTriggerInputTypes.DATE,
+      date
+    }
   })
 }
