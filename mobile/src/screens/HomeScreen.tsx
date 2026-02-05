@@ -40,6 +40,20 @@ export default function HomeScreen() {
         title="➕ Adicionar pet"
         onPress={() => navigation.navigate('AddPet')}
       />
+
+      <View style={{ height: 10 }} />
+
+      <Button
+        title="🛡️ Ver vacinas"
+        onPress={() => navigation.navigate('Vaccines')}
+      />
+
+      <View style={{ height: 10 }} />
+
+      <Button
+        title="➕ Adicionar vacina"
+        onPress={() => navigation.navigate('AddVaccine')}
+      />
     </View>
   )
 }
