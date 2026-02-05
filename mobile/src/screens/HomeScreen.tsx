@@ -1,7 +1,7 @@
 import { View, Text, Button } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from '@/navigation/types'
+import { RootStackParamList } from '../navigation/types'
 
 type NavigationProps =
   NativeStackNavigationProp<RootStackParamList>
@@ -10,12 +10,21 @@ export default function HomeScreen() {
   const navigation = useNavigation<NavigationProps>()
 
   return (
-    <View>
-      <Text>Gateiro App 🐱</Text>
+    <View style={{ padding: 20 }}>
+      <Text style={{ fontSize: 22, marginBottom: 20 }}>
+        Gateiro App 🐱
+      </Text>
 
       <Button
-        title="Ver medicamentos"
+        title="📋 Ver medicamentos"
         onPress={() => navigation.navigate('Medications')}
+      />
+
+      <View style={{ height: 10 }} />
+
+      <Button
+        title="➕ Adicionar medicamento"
+        onPress={() => navigation.navigate('AddMedication')}
       />
     </View>
   )
