@@ -8,6 +8,8 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { typography } from '@/theme/typography'
 import { colors } from '@/theme/colors'
 import * as Notifications from 'expo-notifications'
+import ScreenContainer from '@/components/ScreenContainer'
+import Header from '@/components/Header'
 
 const TYPES: ReminderType[] = ['vacina', 'remedio', 'alimentacao', 'geral']
 
@@ -43,11 +45,8 @@ export default function AddReminderScreen() {
   }
 
   return (
-    <View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-        <Ionicons name="notifications-outline" size={20} color={colors.accentPurple} style={{ marginRight: 8 }} />
-        <Text style={typography.subtitle}>Novo lembrete</Text>
-      </View>
+    <ScreenContainer variant="form">
+      <Header icon="notifications-outline" title="Novo lembrete" />
 
       <Text style={[typography.body, { marginBottom: 8 }]}>Selecione o pet:</Text>
       <FlatList
@@ -115,6 +114,6 @@ export default function AddReminderScreen() {
 
       <View style={{ height: 12 }} />
       <Button title="Salvar" onPress={handleSave} />
-    </View>
+    </ScreenContainer>
   )
 }
