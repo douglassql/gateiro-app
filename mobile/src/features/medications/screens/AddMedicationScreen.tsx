@@ -1,9 +1,11 @@
 import { View, TextInput, Button } from 'react-native'
 import { useState } from 'react'
 import { createMedication } from '../services/MedicationService'
+import { useNavigation } from '@react-navigation/native'
 
 export default function AddMedicationScreen() {
   const [name, setName] = useState('')
+  const navigation = useNavigation()
 
   async function handleSave() {
     await createMedication({
@@ -12,6 +14,8 @@ export default function AddMedicationScreen() {
       start_date: new Date().toISOString(),
       next_dose_date: new Date().toISOString()
     })
+
+    navigation.goBack()
   }
 
   return (
