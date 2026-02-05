@@ -8,6 +8,7 @@ import { RootStackParamList } from '@/navigation/types'
 import { VaccineRepository } from '@/database/repositories/VaccineRepository'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { colors } from '@/theme/colors'
+import FAB from '@/components/FAB'
 
 type NavigationProps =
   NativeStackNavigationProp<RootStackParamList>
@@ -30,7 +31,7 @@ export default function VaccinesListScreen() {
   }
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <FlatList
         data={pets}
         keyExtractor={(item) => String(item.id)}
@@ -125,6 +126,7 @@ export default function VaccinesListScreen() {
           </View>
         )}
       />
+      <FAB onPress={() => navigation.navigate('AddVaccine')} />
     </View>
   )
 }

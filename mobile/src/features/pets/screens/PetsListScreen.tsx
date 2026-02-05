@@ -6,13 +6,14 @@ import { RootStackParamList } from '@/navigation/types'
 import { PetRepository } from '@/database/repositories/PetRepository'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { colors } from '@/theme/colors'
+import FAB from '@/components/FAB'
 
 export default function PetsListScreen() {
   const { pets, reload } = usePets()
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <FlatList
         data={pets}
         keyExtractor={(item) => String(item.id)}
@@ -61,6 +62,7 @@ export default function PetsListScreen() {
           </View>
         )}
       />
+      <FAB onPress={() => navigation.navigate('AddPet')} />
     </View>
   )
 }
