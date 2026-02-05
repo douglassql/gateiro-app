@@ -7,13 +7,14 @@ import { MedicationRepository } from "@/database/repositories/MedicationReposito
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors } from "@/theme/colors";
 import FAB from "@/components/FAB";
+import ScreenContainer from "@/components/ScreenContainer";
 
 export default function MedicationListScreen() {
   const { medications, reload } = useMedications();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
-    <View style={{ flex: 1 }}>
+    <ScreenContainer variant="list">
       <FlatList
         data={medications}
         keyExtractor={(item) => String(item.id)}
@@ -62,6 +63,6 @@ export default function MedicationListScreen() {
         )}
       />
       <FAB onPress={() => navigation.navigate("AddMedication")} />
-    </View>
+    </ScreenContainer>
   );
 }
