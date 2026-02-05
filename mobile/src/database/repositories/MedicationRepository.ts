@@ -10,10 +10,10 @@ export const MedicationRepository = {
       [
         med.pet_id,
         med.name,
-        med.dosage,
+        med.dosage ?? null,
         med.start_date,
         med.next_dose_date,
-        med.interval_hours
+        med.interval_hours ?? null
       ]
     )
   },
