@@ -1,8 +1,8 @@
-import { View, Text, FlatList } from 'react-native'
-import { useMedications } from '../hooks/useMedications'
+import { View, Text, FlatList } from "react-native";
+import { useMedications } from "../hooks/useMedications";
 
 export default function MedicationListScreen() {
-  const { medications } = useMedications()
+  const { medications } = useMedications();
 
   return (
     <View>
@@ -10,9 +10,16 @@ export default function MedicationListScreen() {
         data={medications}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
-          <Text>{item.name}</Text>
+          <View
+            style={{
+              padding: 12,
+              borderBottomWidth: 1,
+            }}
+          >
+            <Text style={{ fontSize: 16 }}>💊 {item.name}</Text>
+          </View>
         )}
       />
     </View>
-  )
+  );
 }
