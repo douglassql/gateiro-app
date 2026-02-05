@@ -1,4 +1,5 @@
 import { db } from '../connection/database'
+import { createMedicationTable }from './medications'
 
 export function runMigrations() {
   db.execSync(`
@@ -10,4 +11,6 @@ export function runMigrations() {
       created_at TEXT DEFAULT CURRENT_TIMESTAMP
     );
   `)
+
+  createMedicationTable()
 }
