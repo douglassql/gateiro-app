@@ -1,11 +1,14 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { RootStackParamList } from './types'
+
 
 import HomeScreen from '../screens/HomeScreen'
 import MedicationListScreen from '../features/medications/screens/MedicationListScreen'
 import AddMedicationScreen from '../features/medications/screens/AddMedicationScreen'
 
-const Stack = createNativeStackNavigator()
+const Stack = createNativeStackNavigator<RootStackParamList>()
+
 
 export default function AppNavigator() {
   return (
