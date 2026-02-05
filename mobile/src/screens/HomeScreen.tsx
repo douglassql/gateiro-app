@@ -26,6 +26,20 @@ export default function HomeScreen() {
         title="➕ Adicionar medicamento"
         onPress={() => navigation.navigate('AddMedication')}
       />
+
+      <View style={{ height: 10 }} />
+
+      <Button
+        title="🐱 Ver pets"
+        onPress={() => navigation.navigate('Pets')}
+      />
+
+      <View style={{ height: 10 }} />
+
+      <Button
+        title="➕ Adicionar pet"
+        onPress={() => navigation.navigate('AddPet')}
+      />
     </View>
   )
 }
