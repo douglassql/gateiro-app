@@ -2,7 +2,7 @@ import { View, Text } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '@/navigation/types'
-import DecorBackground from '@/components/DecorBackground'
+import ScreenContainer from '@/components/ScreenContainer'
 import CardButton from '@/components/CardButton'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { colors } from '@/theme/colors'
@@ -13,8 +13,8 @@ export default function MenuScreen() {
   const navigation = useNavigation<NavigationProps>()
 
   return (
-    <DecorBackground>
-      <View style={{ flex: 1, padding: 20 }}>
+    <ScreenContainer variant="menu">
+      <View style={{ flex: 1 }}>
         <Text style={{ fontSize: 24, color: colors.primaryText, textAlign: 'center', marginVertical: 16 }}>
           Eu quero:
         </Text>
@@ -61,6 +61,6 @@ export default function MenuScreen() {
           </View>
         </View>
       </View>
-    </DecorBackground>
+    </ScreenContainer>
   )
 }
