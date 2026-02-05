@@ -1,5 +1,5 @@
 import { db } from '../connection/database'
-import { Medication } from '@/features/medications/models/Medication'
+import { Medication } from '../features/medications/models/Medication'
 
 export const MedicationRepository = {
   create(med: Medication) {
