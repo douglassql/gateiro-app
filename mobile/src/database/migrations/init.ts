@@ -1,5 +1,6 @@
 import { db } from '../connection/database'
-import { createMedicationTable }from './medications'
+import { createMedicationTable } from './medications'
+import { createVaccineTable } from './vaccines'
 
 export function runMigrations() {
   db.execSync(`
@@ -13,4 +14,5 @@ export function runMigrations() {
   `)
 
   createMedicationTable()
+  createVaccineTable()
 }
