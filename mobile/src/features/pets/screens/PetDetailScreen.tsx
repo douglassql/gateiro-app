@@ -2,6 +2,8 @@ import { View, Text, Image } from 'react-native'
 import { useRoute } from '@react-navigation/native'
 import { PetRepository } from '@/database/repositories/PetRepository'
 import Chip from '@/components/Chip'
+import { colors } from '@/theme/colors'
+import { typography } from '@/theme/typography'
 
 type RouteParams = {
   id: number
@@ -33,7 +35,7 @@ export default function PetDetailScreen() {
   const ageGroup = getAgeGroup(pet.birth_date)
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#EBD9D4' }}>
+    <View style={{ flex: 1, backgroundColor: colors.background }}>
       <View style={{ padding: 16 }}>
         <View style={{ borderRadius: 16, overflow: 'hidden', marginBottom: 12 }}>
           <Image
@@ -42,7 +44,7 @@ export default function PetDetailScreen() {
           />
         </View>
 
-        <Text style={{ fontSize: 24, color: '#3C2C2C', marginBottom: 8 }}>{pet.name}</Text>
+        <Text style={[typography.titleMedium, { marginBottom: 8 }]}>{pet.name}</Text>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 12 }}>
           <Chip label={ageGroup} />
@@ -51,7 +53,7 @@ export default function PetDetailScreen() {
           <Chip label="Brincalhão" />
         </View>
 
-        <Text style={{ color: '#5A4A4A' }}>
+        <Text style={typography.body}>
           Olá, eu sou {pet.name}! Gato muito especial e companheiro.
           Use este perfil para acompanhar saúde, vacinas e rotina.
         </Text>

@@ -2,6 +2,9 @@ import { View, TextInput, Button, Text } from 'react-native'
 import { useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { MedicationRepository } from '@/database/repositories/MedicationRepository'
+import Ionicons from '@expo/vector-icons/Ionicons'
+import { typography } from '@/theme/typography'
+import { colors } from '@/theme/colors'
 
 type RouteParams = {
   id: number
@@ -47,7 +50,10 @@ export default function EditMedicationScreen() {
 
   return (
     <View>
-      <Text style={{ marginBottom: 8 }}>Editar medicamento</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+        <Ionicons name="medkit-outline" size={20} color={colors.accentPurple} style={{ marginRight: 8 }} />
+        <Text style={typography.subtitle}>Editar medicamento</Text>
+      </View>
       <TextInput
         placeholder="Nome"
         value={name}

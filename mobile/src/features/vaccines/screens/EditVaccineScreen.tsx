@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react'
 import { VaccineRepository } from '@/database/repositories/VaccineRepository'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { usePets } from '@/features/pets/hooks/usePets'
+import Ionicons from '@expo/vector-icons/Ionicons'
+import { typography } from '@/theme/typography'
+import { colors } from '@/theme/colors'
 
 type RouteParams = {
   id: number
@@ -45,9 +48,12 @@ export default function EditVaccineScreen() {
 
   return (
     <View>
-      <Text style={{ marginBottom: 8 }}>Editar vacina</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+        <Ionicons name="shield-checkmark-outline" size={20} color={colors.accentPurple} style={{ marginRight: 8 }} />
+        <Text style={typography.subtitle}>Editar vacina</Text>
+      </View>
 
-      <Text style={{ marginBottom: 8 }}>Selecione o pet:</Text>
+      <Text style={[typography.body, { marginBottom: 8 }]}>Selecione o pet:</Text>
       <FlatList
         data={pets}
         keyExtractor={(item) => String(item.id)}
@@ -61,7 +67,7 @@ export default function EditVaccineScreen() {
                 padding: 8,
                 marginRight: 8,
                 borderWidth: 1,
-                borderColor: selected ? '#007AFF' : '#ccc',
+                borderColor: selected ? colors.accentPurple : colors.border,
                 borderRadius: 6
               }}
             >
