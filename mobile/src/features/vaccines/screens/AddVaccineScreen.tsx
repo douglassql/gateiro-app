@@ -6,6 +6,8 @@ import { usePets } from '@/features/pets/hooks/usePets'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { typography } from '@/theme/typography'
 import { colors } from '@/theme/colors'
+import ScreenContainer from '@/components/ScreenContainer'
+import Header from '@/components/Header'
 
 export default function AddVaccineScreen() {
   const [name, setName] = useState('')
@@ -29,11 +31,8 @@ export default function AddVaccineScreen() {
   }
 
   return (
-    <View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-        <Ionicons name="shield-checkmark-outline" size={20} color={colors.accentPurple} style={{ marginRight: 8 }} />
-        <Text style={typography.subtitle}>Nova vacina</Text>
-      </View>
+    <ScreenContainer variant="form">
+      <Header icon="shield-checkmark-outline" title="Nova vacina" />
 
       <Text style={[typography.body, { marginBottom: 8 }]}>Selecione o pet:</Text>
       <FlatList
@@ -120,6 +119,6 @@ export default function AddVaccineScreen() {
       <View style={{ height: 12 }} />
 
       <Button title="Salvar" onPress={handleSave} />
-    </View>
+    </ScreenContainer>
   )
 }
