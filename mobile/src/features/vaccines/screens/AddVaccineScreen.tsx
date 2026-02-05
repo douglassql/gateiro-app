@@ -70,6 +70,36 @@ export default function AddVaccineScreen() {
       />
 
       <View style={{ height: 8 }} />
+      <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity
+          onPress={() => setNextDate(new Date().toISOString())}
+          style={{ padding: 8, borderWidth: 1, borderRadius: 6, marginRight: 8 }}
+        >
+          <Text>Hoje</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            const d = new Date()
+            d.setDate(d.getDate() + 1)
+            setNextDate(d.toISOString())
+          }}
+          style={{ padding: 8, borderWidth: 1, borderRadius: 6, marginRight: 8 }}
+        >
+          <Text>Amanhã</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            const d = new Date()
+            d.setDate(d.getDate() + 30)
+            setNextDate(d.toISOString())
+          }}
+          style={{ padding: 8, borderWidth: 1, borderRadius: 6 }}
+        >
+          <Text>+30 dias</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={{ height: 8 }} />
 
       <TextInput
         placeholder="Notas (opcional)"
