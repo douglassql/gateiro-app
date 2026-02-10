@@ -1,4 +1,11 @@
-export type ReminderType = 'vacina' | 'remedio' | 'alimentacao' | 'geral'
+export type ReminderType = 'vaccine' | 'medication' | 'feeding' | 'general'
+
+export const reminderTypeLabels: Record<ReminderType, string> = {
+  vaccine: 'Vacina',
+  medication: 'Medicamento',
+  feeding: 'Alimentacao',
+  general: 'Geral'
+}
 
 export interface Reminder {
   id?: number

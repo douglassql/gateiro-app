@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { usePets } from '@/features/pets/hooks/usePets'
 import { ReminderRepository } from '@/database/repositories/ReminderRepository'
-import { ReminderType } from '@/database/models/Reminder'
+import { ReminderType, reminderTypeLabels } from '@/database/models/Reminder'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { typography } from '@/theme/typography'
 import { colors } from '@/theme/colors'
@@ -11,13 +11,13 @@ import * as Notifications from 'expo-notifications'
 import ScreenContainer from '@/components/ScreenContainer'
 import Header from '@/components/Header'
 
-const TYPES: ReminderType[] = ['vacina', 'remedio', 'alimentacao', 'geral']
+const TYPES: ReminderType[] = ['vaccine', 'medication', 'feeding', 'general']
 
 export default function AddReminderScreen() {
   const navigation = useNavigation()
   const { pets } = usePets()
   const [selectedPetId, setSelectedPetId] = useState<number | null>(null)
-  const [type, setType] = useState<ReminderType>('geral')
+  const [type, setType] = useState<ReminderType>('general')
   const [datetime, setDatetime] = useState(new Date().toISOString())
   const [title, setTitle] = useState('')
 
@@ -33,7 +33,7 @@ export default function AddReminderScreen() {
     Notifications.scheduleNotificationAsync({
       content: {
         title: 'Lembrete',
-        body: title || `${type} para seu pet`
+        body: title || `${reminderTypeLabels[type]} para seu pet`
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
@@ -90,7 +90,7 @@ export default function AddReminderScreen() {
                 marginRight: 6
               }}
             >
-              <Text>{t}</Text>
+              <Text>{reminderTypeLabels[t]}</Text>
             </TouchableOpacity>
           )
         })}
