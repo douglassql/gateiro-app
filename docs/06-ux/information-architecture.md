@@ -4,11 +4,15 @@
 
 - Home
 - Pets
-- Saúde
-- Alimentação
 - Lembretes
 - Conteúdo
 - Configurações
+
+## Estrutura dentro do perfil do pet
+
+- Saúde
+- Alimentação
+- Histórico
 
 ## Organização
 

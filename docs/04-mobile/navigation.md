@@ -9,13 +9,17 @@
 
 - Home
 - Pets
-- Health
-- Feeding
 - Reminders
 - Content
 - Settings
 
+Dentro do perfil do pet:
+- Health
+- Feeding
+- History
+
 ## Princípios
 
 - navegação baseada em features
-- separação entre rotas autenticadas e públicas
+- rotas únicas no MVP (sem autenticação)
+- autenticação e rotas protegidas somente no futuro
