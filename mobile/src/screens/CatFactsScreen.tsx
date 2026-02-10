@@ -20,25 +20,16 @@ export default function CatFactsScreen() {
 
   const translateText = useCallback(async (text: string) => {
     try {
-      const res = await fetch('https://libretranslate.de/translate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          q: text,
-          source: 'en',
-          target: 'pt',
-          format: 'text'
-        })
-      })
+      const encoded = encodeURIComponent(text)
+      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encoded}&langpair=en|pt`) 
+      if (!res.ok) return null
 
-      if (!res.ok) {
+      const data = (await res.json()) as { responseData?: { translatedText?: string } }
+      const translated = data.responseData?.translatedText?.trim() || null
+      if (!translated || translated.toLowerCase() === text.toLowerCase()) {
         return null
       }
-
-      const data = (await res.json()) as { translatedText?: string }
-      return data.translatedText?.trim() || null
+      return translated
     } catch {
       return null
     }
