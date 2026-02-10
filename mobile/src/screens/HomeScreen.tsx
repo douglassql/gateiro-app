@@ -14,6 +14,7 @@ import { FoodStockRepository } from '@/database/repositories/FoodStockRepository
 import { ConsultationRepository } from '@/database/repositories/ConsultationRepository'
 import { GateiroProfile, loadProfile, saveProfile } from '@/storage/profile'
 import * as ImagePicker from 'expo-image-picker'
+import Ionicons from '@expo/vector-icons/Ionicons'
 
 type NavigationProps = BottomTabNavigationProp<RootTabParamList>
 
@@ -176,7 +177,7 @@ export default function HomeScreen() {
               }}
             />
             <View style={{ height: 12 }} />
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <TouchableOpacity
                 onPress={handlePickProfileImage}
                 style={{
@@ -193,7 +194,7 @@ export default function HomeScreen() {
               {draftPhoto ? (
                 <Image
                   source={{ uri: draftPhoto }}
-                  style={{ width: 48, height: 48, borderRadius: 24 }}
+                  style={{ width: 48, height: 48, borderRadius: 24, marginLeft: 12 }}
                 />
               ) : null}
             </View>
@@ -221,8 +222,7 @@ export default function HomeScreen() {
             padding: 16,
             marginBottom: 16,
             flexDirection: 'row',
-            alignItems: 'center',
-            gap: 12
+            alignItems: 'center'
           }}
         >
           {profile?.photoUri ? (
@@ -246,7 +246,7 @@ export default function HomeScreen() {
               </Text>
             </View>
           )}
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, marginLeft: 12 }}>
             <Text style={typography.subtitle}>{greeting}</Text>
             <Text style={[typography.body, { marginTop: 4 }]}>Resumo do seu dia com seus pets.</Text>
           </View>
@@ -273,7 +273,7 @@ export default function HomeScreen() {
             </TouchableOpacity>
           </View>
         ) : (
-          <View style={{ gap: 12 }}>
+          <View>
             {petCards.map(card => (
               <View
                 key={card.id}
@@ -282,18 +282,36 @@ export default function HomeScreen() {
                   backgroundColor: colors.card,
                   borderWidth: 1,
                   borderColor: colors.border,
-                  padding: 14
+                  padding: 14,
+                  marginBottom: 12
                 }}
               >
-                <Text style={[typography.subtitle, { marginBottom: 6 }]}>{card.name}</Text>
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
-                  <Text style={typography.body}>Vacinas: {card.vaccines}</Text>
-                  <Text style={typography.body}>Medicamentos: {card.medications}</Text>
-                  <Text style={typography.body}>Lembretes: {card.reminders}</Text>
-                  <Text style={typography.body}>Consultas: {card.consultations}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Text style={[typography.subtitle, { marginBottom: 6 }]}>{card.name}</Text>
+                  <Ionicons name="paw-outline" size={18} color={colors.accentPurple} />
                 </View>
-                <Text style={[typography.body, { marginTop: 8 }]}>Proxima vacina: {card.nextVaccine ?? 'Sem data'}</Text>
-                <Text style={[typography.body, { marginTop: 2 }]}>Proximo lembrete: {card.nextReminder ?? 'Sem data'}</Text>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 10, marginBottom: 6 }}>
+                    <Ionicons name="shield-checkmark-outline" size={14} color={colors.accentPurple} />
+                    <Text style={typography.body}>Vacinas: {card.vaccines}</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 10, marginBottom: 6 }}>
+                    <Ionicons name="medkit-outline" size={14} color={colors.accentPurple} />
+                    <Text style={typography.body}>Medicamentos: {card.medications}</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 10, marginBottom: 6 }}>
+                    <Ionicons name="notifications-outline" size={14} color={colors.accentPurple} />
+                    <Text style={typography.body}>Lembretes: {card.reminders}</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 10, marginBottom: 6 }}>
+                    <Ionicons name="calendar-outline" size={14} color={colors.accentPurple} />
+                    <Text style={typography.body}>Consultas: {card.consultations}</Text>
+                  </View>
+                </View>
+                <View style={{ marginTop: 8 }}>
+                  <Text style={typography.body}>Proxima vacina: {card.nextVaccine ?? 'Sem data'}</Text>
+                  <Text style={[typography.body, { marginTop: 2 }]}>Proximo lembrete: {card.nextReminder ?? 'Sem data'}</Text>
+                </View>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('Pets')}
                   style={{ marginTop: 10 }}
@@ -306,7 +324,10 @@ export default function HomeScreen() {
         )}
 
         <View style={{ marginTop: 16, padding: 14, borderRadius: 14, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }}>
-          <Text style={[typography.subtitle, { marginBottom: 6 }]}>Racao (geral)</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text style={[typography.subtitle, { marginBottom: 6 }]}>Racao (geral)</Text>
+            <Ionicons name="restaurant-outline" size={18} color={colors.accentOrange} />
+          </View>
           <Text style={typography.body}>Itens cadastrados: {foodSummary.count}</Text>
           <Text style={[typography.body, { marginTop: 4 }]}>Ultima compra: {foodSummary.latestPurchase ?? 'Sem data'}</Text>
           <Text style={[typography.body, { marginTop: 2 }]}>Marca: {foodSummary.latestBrand ?? 'Sem marca'}</Text>
