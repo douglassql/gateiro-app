@@ -443,24 +443,26 @@ export default function HomeScreen() {
                     </View>
                   </View>
 
-                  <View
-                    style={{
-                      marginTop: 4,
-                      paddingVertical: 8,
-                      paddingHorizontal: 10,
-                      borderRadius: 12,
-                      backgroundColor: statBackgrounds.reminders,
-                      borderWidth: 1,
-                      borderColor: colors.border
-                    }}
-                  >
-                    <Text style={{ fontSize: 12, color: colors.primaryText }}>
-                      Proximo lembrete: {card.nextReminderLabel ?? 'Sem data'}
-                    </Text>
-                    <Text style={{ fontSize: 12, color: colors.secondaryText, marginTop: 2 }}>
-                      {card.nextReminder ?? 'Sem data'}
-                    </Text>
-                  </View>
+                  {card.nextReminderLabel ? (
+                    <View
+                      style={{
+                        marginTop: 4,
+                        paddingVertical: 8,
+                        paddingHorizontal: 10,
+                        borderRadius: 12,
+                        backgroundColor: statBackgrounds.reminders,
+                        borderWidth: 1,
+                        borderColor: colors.border
+                      }}
+                    >
+                      <Text style={{ fontSize: 12, color: colors.primaryText }}>
+                        Proximo lembrete: {card.nextReminderLabel}
+                      </Text>
+                      <Text style={{ fontSize: 12, color: colors.secondaryText, marginTop: 2 }}>
+                        {card.nextReminder ?? 'Sem data'}
+                      </Text>
+                    </View>
+                  ) : null}
 
                   <View style={{ flexDirection: 'row', marginTop: 6 }}>
                     <TouchableOpacity
