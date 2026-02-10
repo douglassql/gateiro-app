@@ -13,5 +13,6 @@ Validar a utilidade do aplicativo com funcionalidades essenciais.
 ## Fora do MVP
 - Backend remoto
 - Comunidade
-- Conteúdo dinâmico
+- Conteudo (dicas e FAQ)
+- Conteudo dinamico
 - Login social

@@ -1,5 +1,7 @@
 # Funcionalidades
 
+Itens marcados como "Futuro" nao fazem parte do MVP.
+
 ## Gestão de Pets
 - Cadastro de gatos
 - Perfil individual
@@ -8,7 +10,7 @@
 ## Saúde
 - Registro de vacinas
 - Controle de medicamentos
-- Consultas veterinárias
+- Consultas veterinarias (Futuro)
 
 ## Alimentação
 - Controle de ração
@@ -17,8 +19,8 @@
 
 ## Lembretes
 - Notificações automáticas
-- Eventos recorrentes
+- Eventos recorrentes (Futuro)
 
 ## Conteúdo
-- Dicas sobre gatos
-- Perguntas frequentes
+- Dicas sobre gatos (Futuro)
+- Perguntas frequentes (Futuro)
