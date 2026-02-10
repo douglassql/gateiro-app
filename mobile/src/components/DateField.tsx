@@ -89,7 +89,7 @@ export default function DateField({ label, value, mode = 'date', onChange }: Pro
 
       {show ? (
         <DateTimePicker
-          value={value ? new Date(value) : new Date()}
+          value={pendingDate ? pendingDate : (value ? new Date(value) : new Date())}
           mode={pickerMode as 'date' | 'time'}
           display={Platform.OS === 'ios' ? 'spinner' : 'default'}
           onChange={handleChange}
