@@ -64,15 +64,29 @@ export default function EditReminderScreen() {
   } as const
 
   const chipStyle = {
-    padding: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
     marginRight: 8,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 6
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+    maxWidth: 120,
+    alignSelf: 'flex-start',
+    overflow: 'hidden'
   } as const
 
   const chipSelectedStyle = {
     borderColor: colors.accentPurple
+  } as const
+
+  const chipTextStyle = {
+    color: colors.primaryText,
+    includeFontPadding: false,
+    lineHeight: 18,
+    flexShrink: 1,
+    maxWidth: '100%'
   } as const
 
   return (
@@ -91,7 +105,13 @@ export default function EditReminderScreen() {
               onPress={() => setSelectedPetId(item.id!)}
               style={[chipStyle, selected ? chipSelectedStyle : null]}
             >
-              <Text>{item.name}</Text>
+              <Text
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                style={chipTextStyle}
+              >
+                {item.name}
+              </Text>
             </TouchableOpacity>
           )
         }}
@@ -127,6 +147,7 @@ export default function EditReminderScreen() {
       <View style={{ height: 12 }} />
       <TextInput
         placeholder="Título (opcional)"
+        placeholderTextColor={colors.secondaryText}
         value={title}
         onChangeText={setTitle}
         style={inputStyle}

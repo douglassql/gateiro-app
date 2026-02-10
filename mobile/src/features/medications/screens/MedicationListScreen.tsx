@@ -1,7 +1,8 @@
 import { View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
 import { useMedications } from "../hooks/useMedications";
 import { usePets } from "@/features/pets/hooks/usePets";
-import { useNavigation } from "@react-navigation/native";
+import { useCallback } from "react";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/navigation/types";
 import { MedicationRepository } from "@/database/repositories/MedicationRepository";
@@ -14,6 +15,12 @@ export default function MedicationListScreen() {
   const { medications, reload } = useMedications();
   const { pets } = usePets();
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  useFocusEffect(
+    useCallback(() => {
+      reload();
+    }, [reload])
+  );
 
   return (
     <ScreenContainer variant="list">

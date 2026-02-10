@@ -61,6 +61,7 @@ export default function SettingsScreen() {
           <Text style={[typography.subtitle, { marginBottom: 8 }]}>Perfil do gateiro</Text>
           <TextInput
             placeholder="Seu nome"
+            placeholderTextColor={colors.secondaryText}
             value={name}
             onChangeText={setName}
             style={{

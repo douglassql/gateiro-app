@@ -1,8 +1,8 @@
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native'
 import { useConsultations } from '../hooks/useConsultations'
 import { usePets } from '@/features/pets/hooks/usePets'
-import { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useCallback, useState } from 'react'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '@/navigation/types'
 import { ConsultationRepository } from '@/database/repositories/ConsultationRepository'
@@ -23,6 +23,12 @@ export default function ConsultationsListScreen() {
     return isNaN(date.getTime()) ? d : date.toLocaleDateString('pt-BR')
   }
 
+  useFocusEffect(
+    useCallback(() => {
+      reload()
+    }, [reload])
+  )
+
   return (
     <ScreenContainer variant="list">
       <FlatList
@@ -35,14 +41,32 @@ export default function ConsultationsListScreen() {
             <TouchableOpacity
               onPress={() => setSelectedPetId(selected ? null : (item.id as number))}
               style={{
-                padding: 8,
+                paddingVertical: 6,
+                paddingHorizontal: 10,
                 marginRight: 8,
                 borderWidth: 1,
                 borderColor: selected ? colors.accentPurple : colors.border,
-                borderRadius: 6
+                borderRadius: 6,
+                maxWidth: 120,
+                alignSelf: 'flex-start',
+                overflow: 'hidden',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
             >
-              <Text>{item.name}</Text>
+              <Text
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                style={{
+                  color: colors.primaryText,
+                  flexShrink: 1,
+                  maxWidth: '100%',
+                  includeFontPadding: false,
+                  lineHeight: 18
+                }}
+              >
+                {item.name}
+              </Text>
             </TouchableOpacity>
           )
         }}
@@ -131,47 +155,47 @@ export default function ConsultationsListScreen() {
                 ) : null}
 
                 <View style={{ flexDirection: 'row', marginTop: 14 }}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('EditConsultation', { id: item.id! })}
-                style={{
-                  paddingVertical: 6,
-                  paddingHorizontal: 12,
-                  borderWidth: 1,
-                  borderRadius: 8,
-                  marginRight: 8,
-                  borderColor: colors.border
-                }}
-              >
-                <Text style={{ color: colors.primaryText }}>Editar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  Alert.alert(
-                    'Excluir consulta',
-                    'Tem certeza que deseja excluir este registro?',
-                    [
-                      { text: 'Cancelar', style: 'cancel' },
-                      {
-                        text: 'Excluir',
-                        style: 'destructive',
-                        onPress: () => {
-                          ConsultationRepository.deleteById(item.id as number)
-                          ;(reload as () => void)()
-                        }
-                      }
-                    ]
-                  )
-                }}
-                style={{
-                  paddingVertical: 6,
-                  paddingHorizontal: 12,
-                  borderWidth: 1,
-                  borderRadius: 8,
-                  borderColor: colors.border
-                }}
-              >
-                <Text style={{ color: colors.primaryText }}>Excluir</Text>
-              </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('EditConsultation', { id: item.id! })}
+                    style={{
+                      paddingVertical: 6,
+                      paddingHorizontal: 12,
+                      borderWidth: 1,
+                      borderRadius: 8,
+                      marginRight: 8,
+                      borderColor: colors.border
+                    }}
+                  >
+                    <Text style={{ color: colors.primaryText }}>Editar</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      Alert.alert(
+                        'Excluir consulta',
+                        'Tem certeza que deseja excluir este registro?',
+                        [
+                          { text: 'Cancelar', style: 'cancel' },
+                          {
+                            text: 'Excluir',
+                            style: 'destructive',
+                            onPress: () => {
+                              ConsultationRepository.deleteById(item.id as number)
+                              ;(reload as () => void)()
+                            }
+                          }
+                        ]
+                      )
+                    }}
+                    style={{
+                      paddingVertical: 6,
+                      paddingHorizontal: 12,
+                      borderWidth: 1,
+                      borderRadius: 8,
+                      borderColor: colors.border
+                    }}
+                  >
+                    <Text style={{ color: colors.primaryText }}>Excluir</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>

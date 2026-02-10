@@ -1,6 +1,7 @@
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native'
 import { useFoodStock } from '../hooks/useFoodStock'
-import { useNavigation } from '@react-navigation/native'
+import { useCallback } from 'react'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '@/navigation/types'
 import { FoodStockRepository } from '@/database/repositories/FoodStockRepository'
@@ -12,6 +13,12 @@ import ScreenContainer from '@/components/ScreenContainer'
 export default function FoodStockListScreen() {
   const { items, reload } = useFoodStock()
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+
+  useFocusEffect(
+    useCallback(() => {
+      reload()
+    }, [reload])
+  )
 
   function formatDate(d?: string) {
     if (!d) return undefined

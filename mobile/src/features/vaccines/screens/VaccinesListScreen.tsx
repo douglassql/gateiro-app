@@ -1,8 +1,8 @@
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native'
 import { useVaccines } from '../hooks/useVaccines'
 import { usePets } from '@/features/pets/hooks/usePets'
-import { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useCallback, useState } from 'react'
+import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '@/navigation/types'
 import { VaccineRepository } from '@/database/repositories/VaccineRepository'
@@ -31,6 +31,12 @@ export default function VaccinesListScreen() {
     return date ? date.toLocaleDateString('pt-BR') : d
   }
 
+  useFocusEffect(
+    useCallback(() => {
+      reload()
+    }, [reload])
+  )
+
   return (
     <ScreenContainer variant="list">
       <FlatList
@@ -45,14 +51,26 @@ export default function VaccinesListScreen() {
                 setSelectedPetId(selected ? null : (item.id as number))
               }
               style={{
-                padding: 8,
+                paddingVertical: 6,
+                paddingHorizontal: 10,
                 marginRight: 8,
                 borderWidth: 1,
-                borderColor: selected ? '#007AFF' : '#ccc',
-                borderRadius: 6
+                borderColor: selected ? colors.accentPurple : colors.border,
+                borderRadius: 6,
+                maxWidth: 120,
+                alignSelf: 'flex-start',
+                overflow: 'hidden',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
             >
-              <Text>{item.name}</Text>
+              <Text
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                style={{ color: colors.primaryText, flexShrink: 1, maxWidth: '100%', includeFontPadding: false, lineHeight: 18 }}
+              >
+                {item.name}
+              </Text>
             </TouchableOpacity>
           )
         }}

@@ -194,6 +194,7 @@ export default function HomeScreen() {
             <View style={{ height: 12 }} />
             <TextInput
               placeholder="Seu nome"
+              placeholderTextColor={colors.secondaryText}
               value={draftName}
               onChangeText={setDraftName}
               style={{

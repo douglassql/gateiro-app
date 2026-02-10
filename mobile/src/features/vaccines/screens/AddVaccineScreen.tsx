@@ -1,4 +1,4 @@
-import { View, TextInput, Button, Text, FlatList, TouchableOpacity } from 'react-native'
+import { View, TextInput, Text, FlatList, TouchableOpacity } from 'react-native'
 import { useState } from 'react'
 import { VaccineRepository } from '@/database/repositories/VaccineRepository'
 import { useNavigation } from '@react-navigation/native'
@@ -31,6 +31,38 @@ export default function AddVaccineScreen() {
     navigation.goBack()
   }
 
+  const chipStyle = {
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    marginRight: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+    maxWidth: 120,
+    alignSelf: 'flex-start',
+    overflow: 'hidden'
+  } as const
+
+  const chipTextStyle = {
+    color: colors.primaryText,
+    includeFontPadding: false,
+    lineHeight: 18,
+    flexShrink: 1,
+    maxWidth: '100%'
+  } as const
+
+  const inputStyle = {
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    backgroundColor: '#FFF',
+    color: colors.primaryText
+  } as const
+
   return (
     <ScreenContainer variant="form">
       <Header icon="shield-checkmark-outline" title="Nova vacina" />
@@ -45,15 +77,15 @@ export default function AddVaccineScreen() {
           return (
             <TouchableOpacity
               onPress={() => setSelectedPetId(item.id!)}
-              style={{
-                padding: 8,
-                marginRight: 8,
-                borderWidth: 1,
-                borderColor: selected ? colors.accentPurple : colors.border,
-                borderRadius: 6
-              }}
+              style={[chipStyle, selected ? { borderColor: colors.accentPurple } : null]}
             >
-              <Text>{item.name}</Text>
+              <Text
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                style={chipTextStyle}
+              >
+                {item.name}
+              </Text>
             </TouchableOpacity>
           )
         }}
@@ -63,8 +95,10 @@ export default function AddVaccineScreen() {
 
       <TextInput
         placeholder="Nome da vacina"
+        placeholderTextColor={colors.secondaryText}
         value={name}
         onChangeText={setName}
+        style={inputStyle}
       />
 
       <View style={{ height: 8 }} />
@@ -109,15 +143,27 @@ export default function AddVaccineScreen() {
 
       <TextInput
         placeholder="Notas (opcional)"
+        placeholderTextColor={colors.secondaryText}
         value={notes}
         onChangeText={setNotes}
         multiline
         numberOfLines={3}
+        style={[inputStyle, { minHeight: 90 }]}
       />
 
       <View style={{ height: 12 }} />
 
-      <Button title="Salvar" onPress={handleSave} />
+      <TouchableOpacity
+        onPress={handleSave}
+        style={{
+          backgroundColor: colors.primaryText,
+          paddingVertical: 12,
+          borderRadius: 10,
+          alignItems: 'center'
+        }}
+      >
+        <Text style={{ color: '#FFF', fontSize: 16 }}>Salvar</Text>
+      </TouchableOpacity>
     </ScreenContainer>
   )
 }

@@ -1,5 +1,5 @@
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native'
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
+import { useNavigation, useRoute, RouteProp, useFocusEffect } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList, RootTabParamList } from '@/navigation/types'
 import { useReminders } from '../hooks/useReminders'
@@ -10,7 +10,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { colors } from '@/theme/colors'
 import { usePets } from '@/features/pets/hooks/usePets'
 import ScreenContainer from '@/components/ScreenContainer'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 export default function RemindersListScreen() {
   const { reminders, reload } = useReminders()
@@ -24,6 +24,12 @@ export default function RemindersListScreen() {
       setSelectedPetId(route.params.petId)
     }
   }, [route.params?.petId])
+
+  useFocusEffect(
+    useCallback(() => {
+      reload()
+    }, [reload])
+  )
 
   const filteredReminders = useMemo(() => {
     if (!selectedPetId) return reminders
@@ -41,10 +47,15 @@ export default function RemindersListScreen() {
             borderRadius: 14,
             borderWidth: 1,
             borderColor: selectedPetId === null ? colors.accentPurple : colors.border,
-            marginRight: 6
+            marginRight: 6,
+            maxWidth: 120,
+            alignSelf: 'flex-start',
+            overflow: 'hidden',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
         >
-          <Text style={{ color: colors.primaryText }}>Todos</Text>
+          <Text style={{ color: colors.primaryText, includeFontPadding: false, lineHeight: 18 }}>Todos</Text>
         </TouchableOpacity>
         <FlatList
           data={pets}
@@ -61,10 +72,21 @@ export default function RemindersListScreen() {
                   borderRadius: 14,
                   borderWidth: 1,
                   borderColor: selected ? colors.accentPurple : colors.border,
-                  marginRight: 6
+                  marginRight: 6,
+                  maxWidth: 120,
+                  alignSelf: 'flex-start',
+                  overflow: 'hidden',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
               >
-                <Text style={{ color: colors.primaryText }}>{item.name}</Text>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={{ maxWidth: '100%', color: colors.primaryText, flexShrink: 1, includeFontPadding: false, lineHeight: 18 }}
+                >
+                  {item.name}
+                </Text>
               </TouchableOpacity>
             )
           }}
