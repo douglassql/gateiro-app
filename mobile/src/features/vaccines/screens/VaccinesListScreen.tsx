@@ -89,45 +89,77 @@ export default function VaccinesListScreen() {
               marginBottom: 12
             }}
           >
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Ionicons name="shield-checkmark-outline" size={18} color={colors.accentPurple} style={{ marginRight: 8 }} />
-                <Text style={{ fontSize: 16, color: colors.primaryText }} numberOfLines={1}>
-                  {item.name}
-                </Text>
-              </View>
-              {item.next_date ? (
-                <Text style={{ color: colors.secondaryText, fontSize: 12 }}>{formatDate(item.next_date)}</Text>
-              ) : null}
-            </View>
-
-            {(() => {
-              const pet = pets.find(p => p.id === item.pet_id)
-              return pet ? (
-                <View
-                  style={{
-                    marginTop: 8,
-                    alignSelf: 'flex-start',
-                    paddingVertical: 4,
-                    paddingHorizontal: 8,
-                    borderRadius: 12,
-                    backgroundColor: '#FFF',
-                    borderWidth: 1,
-                    borderColor: colors.border
-                  }}
-                >
-                  <Text style={{ color: colors.secondaryText, fontSize: 12 }}>Pet: {pet.name}</Text>
+            <View style={{ flexDirection: 'row' }}>
+              <View
+                style={{
+                  width: 4,
+                  borderRadius: 4,
+                  backgroundColor: colors.accentPurple,
+                  marginRight: 10
+                }}
+              />
+              <View style={{ flex: 1 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, marginRight: 8 }}>
+                    <Ionicons name="shield-checkmark-outline" size={18} color={colors.accentPurple} style={{ marginRight: 8 }} />
+                    <Text style={{ fontSize: 16, color: colors.primaryText }} numberOfLines={1}>
+                      {item.name}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      paddingVertical: 4,
+                      paddingHorizontal: 8,
+                      borderRadius: 12,
+                      backgroundColor: '#FFF',
+                      borderWidth: 1,
+                      borderColor: colors.border
+                    }}
+                  >
+                    <Text style={{ color: colors.secondaryText, fontSize: 12 }}>
+                      {item.next_date ? formatDate(item.next_date) : 'Sem data'}
+                    </Text>
+                  </View>
                 </View>
-              ) : null
-            })()}
 
-            {item.notes ? (
-              <Text style={{ color: colors.secondaryText, marginTop: 10 }} numberOfLines={2}>
-                Notas: {item.notes}
-              </Text>
-            ) : null}
+                {(() => {
+                  const pet = pets.find(p => p.id === item.pet_id)
+                  return pet ? (
+                    <View
+                      style={{
+                        marginTop: 10,
+                        alignSelf: 'flex-start',
+                        paddingVertical: 4,
+                        paddingHorizontal: 8,
+                        borderRadius: 12,
+                        backgroundColor: '#FFF',
+                        borderWidth: 1,
+                        borderColor: colors.border
+                      }}
+                    >
+                      <Text style={{ color: colors.secondaryText, fontSize: 12 }}>Pet: {pet.name}</Text>
+                    </View>
+                  ) : null
+                })()}
 
-            <View style={{ flexDirection: 'row', marginTop: 14 }}>
+                {item.notes ? (
+                  <View
+                    style={{
+                      marginTop: 10,
+                      padding: 10,
+                      borderRadius: 10,
+                      backgroundColor: '#FFF',
+                      borderWidth: 1,
+                      borderColor: colors.border
+                    }}
+                  >
+                    <Text style={{ color: colors.secondaryText }} numberOfLines={2}>
+                      Notas: {item.notes}
+                    </Text>
+                  </View>
+                ) : null}
+
+                <View style={{ flexDirection: 'row', marginTop: 14 }}>
               <TouchableOpacity
                 onPress={() => navigation.navigate('EditVaccine', { id: item.id! })}
                 style={{
@@ -169,6 +201,8 @@ export default function VaccinesListScreen() {
               >
                 <Text style={{ color: colors.primaryText }}>Excluir</Text>
               </TouchableOpacity>
+                </View>
+              </View>
             </View>
           </View>
         )}
