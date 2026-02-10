@@ -59,6 +59,7 @@ export default function AddPetScreen() {
       <Header icon="paw-outline" title="Novo pet" />
       <TextInput
         placeholder="Nome do pet"
+        placeholderTextColor={colors.secondaryText}
         value={name}
         onChangeText={setName}
         style={inputStyle}
@@ -72,6 +73,7 @@ export default function AddPetScreen() {
       <View style={{ height: 8 }} />
       <TextInput
         placeholder="Peso (kg)"
+        placeholderTextColor={colors.secondaryText}
         value={weight}
         onChangeText={setWeight}
         keyboardType="decimal-pad"
@@ -103,6 +105,7 @@ export default function AddPetScreen() {
       <View style={{ height: 8 }} />
       <TextInput
         placeholder="Caracteristicas (ex.: calmo, carinhoso)"
+        placeholderTextColor={colors.secondaryText}
         value={traits}
         onChangeText={setTraits}
         style={inputStyle}
@@ -110,6 +113,7 @@ export default function AddPetScreen() {
       <View style={{ height: 8 }} />
       <TextInput
         placeholder="Sobre o pet (opcional)"
+        placeholderTextColor={colors.secondaryText}
         value={notes}
         onChangeText={setNotes}
         multiline
