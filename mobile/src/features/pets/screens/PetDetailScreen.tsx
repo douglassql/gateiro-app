@@ -1,5 +1,5 @@
 import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { PetRepository } from '@/database/repositories/PetRepository'
 import Chip from '@/components/Chip'
@@ -9,6 +9,8 @@ import ScreenContainer from '@/components/ScreenContainer'
 import Header from '@/components/Header'
 import CardButton from '@/components/CardButton'
 import { RootStackParamList } from '@/navigation/types'
+import { useCallback, useState } from 'react'
+import { Pet } from '@/database/models/Pet'
 
 type RouteParams = {
   id: number
@@ -28,7 +30,14 @@ export default function PetDetailScreen() {
   const route = useRoute()
   const { id } = route.params as unknown as RouteParams
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
-  const pet = PetRepository.findById(id)
+  const [pet, setPet] = useState<Pet | null>(null)
+
+  useFocusEffect(
+    useCallback(() => {
+      const data = PetRepository.findById(id)
+      setPet(data)
+    }, [id])
+  )
 
   if (!pet) {
     return (

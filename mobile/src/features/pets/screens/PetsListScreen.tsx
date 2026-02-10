@@ -1,6 +1,6 @@
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native'
 import { usePets } from '../hooks/usePets'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '@/navigation/types'
 import { PetRepository } from '@/database/repositories/PetRepository'
@@ -8,10 +8,17 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { colors } from '@/theme/colors'
 import FAB from '@/components/FAB'
 import ScreenContainer from '@/components/ScreenContainer'
+import { useCallback } from 'react'
 
 export default function PetsListScreen() {
   const { pets, reload } = usePets()
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+
+  useFocusEffect(
+    useCallback(() => {
+      reload()
+    }, [reload])
+  )
 
   return (
     <ScreenContainer variant="list">
