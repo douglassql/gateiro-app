@@ -16,20 +16,55 @@ export default function CatFactsScreen() {
   const [facts, setFacts] = useState<CatFact[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [translateNotice, setTranslateNotice] = useState<string | null>(null)
+
+  const translateText = useCallback(async (text: string) => {
+    try {
+      const res = await fetch('https://libretranslate.de/translate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          q: text,
+          source: 'en',
+          target: 'pt',
+          format: 'text'
+        })
+      })
+
+      if (!res.ok) {
+        return null
+      }
+
+      const data = (await res.json()) as { translatedText?: string }
+      return data.translatedText?.trim() || null
+    } catch {
+      return null
+    }
+  }, [])
 
   const fetchFact = useCallback(async () => {
     setLoading(true)
     setError(null)
+    setTranslateNotice(null)
     try {
       const res = await fetch('https://catfact.ninja/fact')
       if (!res.ok) {
         throw new Error('Falha ao buscar fatos')
       }
       const data = (await res.json()) as { fact: string; length: number }
+      const translated = await translateText(data.fact)
+      const factText = translated || data.fact
+
+      if (!translated) {
+        setTranslateNotice('Nao foi possivel traduzir, exibindo em ingles.')
+      }
+
       setFacts(prev => [
         {
           id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-          fact: data.fact,
+          fact: factText,
           length: data.length
         },
         ...prev
@@ -93,6 +128,21 @@ export default function CatFactsScreen() {
           }}
         >
           <Text style={{ color: colors.secondaryText }}>{error}</Text>
+        </View>
+      ) : null}
+
+      {translateNotice ? (
+        <View
+          style={{
+            marginBottom: 12,
+            padding: 10,
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: colors.border,
+            backgroundColor: colors.card
+          }}
+        >
+          <Text style={{ color: colors.secondaryText }}>{translateNotice}</Text>
         </View>
       ) : null}
 
