@@ -9,6 +9,7 @@ import { colors } from '@/theme/colors'
 import FAB from '@/components/FAB'
 import ScreenContainer from '@/components/ScreenContainer'
 import { useCallback } from 'react'
+import Chip from '@/components/Chip'
 
 export default function PetsListScreen() {
   const { pets, reload } = usePets()
@@ -121,19 +122,14 @@ export default function PetsListScreen() {
                 ) : null}
 
                 {item.traits ? (
-                  <View
-                    style={{
-                      marginTop: 10,
-                      padding: 10,
-                      borderRadius: 10,
-                      backgroundColor: '#FFF',
-                      borderWidth: 1,
-                      borderColor: colors.border
-                    }}
-                  >
-                    <Text style={{ color: colors.secondaryText }} numberOfLines={2}>
-                      Caracteristicas: {item.traits}
-                    </Text>
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 10 }}>
+                    {item.traits
+                      .split(/[,;]+/)
+                      .map(t => t.trim())
+                      .filter(Boolean)
+                      .map((trait, index) => (
+                        <Chip key={`${trait}-${index}`} label={trait} />
+                      ))}
                   </View>
                 ) : null}
 

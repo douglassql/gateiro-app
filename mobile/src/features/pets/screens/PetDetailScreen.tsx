@@ -50,6 +50,12 @@ export default function PetDetailScreen() {
   }
 
   const ageGroup = getAgeGroup(pet.birth_date)
+  const traits = pet.traits
+    ? pet.traits
+        .split(/[,;]+/)
+        .map(t => t.trim())
+        .filter(Boolean)
+    : []
 
   return (
     <ScreenContainer variant="detail">
@@ -108,9 +114,15 @@ export default function PetDetailScreen() {
         <Text style={[typography.body, { marginBottom: 16 }]}>Use este perfil para acompanhar saude, alimentacao e rotina.</Text>
 
         <Text style={[typography.subtitle, { marginBottom: 6 }]}>Caracteristicas</Text>
-        <Text style={[typography.body, { marginBottom: 12 }]}>
-          {pet.traits && pet.traits.trim().length > 0 ? pet.traits : 'Nao informado'}
-        </Text>
+        {traits.length > 0 ? (
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 12 }}>
+            {traits.map((trait, index) => (
+              <Chip key={`${trait}-${index}`} label={trait} />
+            ))}
+          </View>
+        ) : (
+          <Text style={[typography.body, { marginBottom: 12 }]}>Nao informado</Text>
+        )}
 
         <Text style={[typography.subtitle, { marginBottom: 6 }]}>Sobre</Text>
         <Text style={[typography.body, { marginBottom: 16 }]}>
