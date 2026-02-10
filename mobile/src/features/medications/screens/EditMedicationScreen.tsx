@@ -1,10 +1,13 @@
-import { View, TextInput, Button, Text } from 'react-native'
+import { View, TextInput, Button, Text, FlatList, TouchableOpacity } from 'react-native'
 import { useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { MedicationRepository } from '@/database/repositories/MedicationRepository'
-import Ionicons from '@expo/vector-icons/Ionicons'
+import { usePets } from '@/features/pets/hooks/usePets'
 import { typography } from '@/theme/typography'
 import { colors } from '@/theme/colors'
+import ScreenContainer from '@/components/ScreenContainer'
+import Header from '@/components/Header'
+import DateField from '@/components/DateField'
 
 type RouteParams = {
   id: number
@@ -14,6 +17,7 @@ export default function EditMedicationScreen() {
   const navigation = useNavigation()
   const route = useRoute()
   const { id } = (route.params as unknown as RouteParams)
+  const { pets } = usePets()
 
   const [name, setName] = useState('')
   const [dosage, setDosage] = useState('')
@@ -49,11 +53,33 @@ export default function EditMedicationScreen() {
   }
 
   return (
-    <View>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-        <Ionicons name="medkit-outline" size={20} color={colors.accentPurple} style={{ marginRight: 8 }} />
-        <Text style={typography.subtitle}>Editar medicamento</Text>
-      </View>
+    <ScreenContainer variant="form">
+      <Header icon="medkit-outline" title="Editar medicamento" />
+      <Text style={[typography.body, { marginBottom: 8 }]}>Selecione o pet:</Text>
+      <FlatList
+        data={pets}
+        keyExtractor={(item) => String(item.id)}
+        horizontal
+        renderItem={({ item }) => {
+          const selected = petId === item.id
+          return (
+            <TouchableOpacity
+              onPress={() => setPetId(item.id!)}
+              style={{
+                padding: 8,
+                marginRight: 8,
+                borderWidth: 1,
+                borderColor: selected ? colors.accentPurple : colors.border,
+                borderRadius: 6
+              }}
+            >
+              <Text>{item.name}</Text>
+            </TouchableOpacity>
+          )
+        }}
+      />
+
+      <View style={{ height: 12 }} />
       <TextInput
         placeholder="Nome"
         value={name}
@@ -66,20 +92,16 @@ export default function EditMedicationScreen() {
         onChangeText={setDosage}
       />
       <View style={{ height: 8 }} />
-      <TextInput
-        placeholder="Data de início (ISO)"
+      <DateField
+        label="Data de inicio"
         value={startDate}
-        onChangeText={setStartDate}
-        autoCapitalize="none"
-        autoCorrect={false}
+        onChange={setStartDate}
       />
       <View style={{ height: 8 }} />
-      <TextInput
-        placeholder="Próxima dose (ISO)"
+      <DateField
+        label="Proxima dose"
         value={nextDoseDate}
-        onChangeText={setNextDoseDate}
-        autoCapitalize="none"
-        autoCorrect={false}
+        onChange={setNextDoseDate}
       />
       <View style={{ height: 8 }} />
       <TextInput
@@ -90,6 +112,6 @@ export default function EditMedicationScreen() {
       />
       <View style={{ height: 12 }} />
       <Button title="Salvar" onPress={handleSave} />
-    </View>
+    </ScreenContainer>
   )
 }
