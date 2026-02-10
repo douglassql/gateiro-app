@@ -82,7 +82,9 @@ export default function VaccinesListScreen() {
           <View style={{ padding: 12, borderBottomWidth: 1 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Ionicons name="shield-checkmark-outline" size={18} color={colors.accentPurple} style={{ marginRight: 8 }} />
-              <Text style={{ fontSize: 16 }}>{item.name}</Text>
+              <Text style={{ fontSize: 16, flexShrink: 1 }} numberOfLines={1} ellipsizeMode="tail">
+                {item.name}
+              </Text>
             </View>
             {(() => {
               const pet = pets.find(p => p.id === item.pet_id)
