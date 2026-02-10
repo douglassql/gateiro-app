@@ -1,9 +1,12 @@
-import { View, TextInput, Button } from 'react-native'
+import { View, TextInput, Button, Image, TouchableOpacity, Text } from 'react-native'
 import { useState } from 'react'
 import { PetRepository } from '@/database/repositories/PetRepository'
 import { useNavigation } from '@react-navigation/native'
 import ScreenContainer from '@/components/ScreenContainer'
 import Header from '@/components/Header'
+import DateField from '@/components/DateField'
+import * as ImagePicker from 'expo-image-picker'
+import { colors } from '@/theme/colors'
 
 export default function AddPetScreen() {
   const [name, setName] = useState('')
@@ -13,6 +16,20 @@ export default function AddPetScreen() {
   const [traits, setTraits] = useState('')
   const [notes, setNotes] = useState('')
   const navigation = useNavigation()
+
+  async function handlePickImage() {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
+    if (status !== 'granted') return
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 0.8
+    })
+
+    if (!result.canceled && result.assets.length > 0) {
+      setPhotoUri(result.assets[0].uri)
+    }
+  }
 
   function handleSave() {
     if (!name) return
@@ -36,12 +53,10 @@ export default function AddPetScreen() {
         onChangeText={setName}
       />
       <View style={{ height: 8 }} />
-      <TextInput
-        placeholder="Data de nascimento (ISO opcional)"
+      <DateField
+        label="Data de nascimento (opcional)"
         value={birthDate}
-        onChangeText={setBirthDate}
-        autoCapitalize="none"
-        autoCorrect={false}
+        onChange={setBirthDate}
       />
       <View style={{ height: 8 }} />
       <TextInput
@@ -51,13 +66,28 @@ export default function AddPetScreen() {
         keyboardType="decimal-pad"
       />
       <View style={{ height: 8 }} />
-      <TextInput
-        placeholder="Foto (URL opcional)"
-        value={photoUri}
-        onChangeText={setPhotoUri}
-        autoCapitalize="none"
-        autoCorrect={false}
-      />
+      <Text style={{ marginBottom: 6, color: colors.secondaryText }}>Foto (opcional)</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+        <TouchableOpacity
+          onPress={handlePickImage}
+          style={{
+            paddingVertical: 10,
+            paddingHorizontal: 12,
+            borderRadius: 8,
+            borderWidth: 1,
+            borderColor: colors.border,
+            backgroundColor: colors.card
+          }}
+        >
+          <Text style={{ color: colors.primaryText }}>Selecionar imagem</Text>
+        </TouchableOpacity>
+        {photoUri ? (
+          <Image
+            source={{ uri: photoUri }}
+            style={{ width: 48, height: 48, borderRadius: 24 }}
+          />
+        ) : null}
+      </View>
       <View style={{ height: 8 }} />
       <TextInput
         placeholder="Caracteristicas (ex.: calmo, carinhoso)"
