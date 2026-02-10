@@ -112,6 +112,12 @@ export default function PetDetailScreen() {
             subtitle="Rotina e avisos"
             onPress={() => navigation.navigate('Tabs', { screen: 'Reminders' })}
           />
+          <CardButton
+            iconName="restaurant-outline"
+            title="Alimentacao"
+            subtitle="Controle de racao"
+            onPress={() => navigation.navigate('FoodStock')}
+          />
         </View>
       </ScrollView>
     </ScreenContainer>

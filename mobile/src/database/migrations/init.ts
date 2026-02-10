@@ -2,6 +2,7 @@ import { db } from '../connection/database'
 import { createMedicationTable } from './medications'
 import { createVaccineTable } from './vaccines'
 import { createReminderTable } from './reminders'
+import { createFoodStockTable } from './food-stock'
 
 export function runMigrations() {
   db.execSync(`
@@ -20,4 +21,5 @@ export function runMigrations() {
   createMedicationTable()
   createVaccineTable()
   createReminderTable()
+  createFoodStockTable()
 }
