@@ -53,25 +53,54 @@ export default function ConsultationsListScreen() {
         data={selectedPetId ? consultations.filter(c => c.pet_id === selectedPetId) : consultations}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
-          <View style={{ padding: 12, borderBottomWidth: 1 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Ionicons name="calendar-outline" size={18} color={colors.accentPurple} style={{ marginRight: 8 }} />
-              <Text style={{ fontSize: 16, flexShrink: 1 }} numberOfLines={1}>
-                {item.title}
-              </Text>
+          <View
+            style={{
+              padding: 14,
+              borderRadius: 14,
+              borderWidth: 1,
+              borderColor: colors.border,
+              backgroundColor: colors.card,
+              marginBottom: 12
+            }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Ionicons name="calendar-outline" size={18} color={colors.accentPurple} style={{ marginRight: 8 }} />
+                <Text style={{ fontSize: 16, color: colors.primaryText }} numberOfLines={1}>
+                  {item.title}
+                </Text>
+              </View>
+              <Text style={{ color: colors.secondaryText, fontSize: 12 }}>{formatDate(item.date)}</Text>
             </View>
+
             {(() => {
               const pet = pets.find(p => p.id === item.pet_id)
-              return pet ? <Text style={{ color: colors.secondaryText }}>Pet: {pet.name}</Text> : null
+              return pet ? (
+                <Text style={{ color: colors.secondaryText, marginTop: 6 }}>
+                  Pet: {pet.name}
+                </Text>
+              ) : null
             })()}
-            <Text style={{ color: colors.secondaryText }}>Data: {formatDate(item.date)}</Text>
-            {item.notes ? <Text style={{ color: colors.secondaryText }}>Notas: {item.notes}</Text> : null}
-            <View style={{ flexDirection: 'row', marginTop: 8 }}>
+
+            {item.notes ? (
+              <Text style={{ color: colors.secondaryText, marginTop: 6 }} numberOfLines={2}>
+                Notas: {item.notes}
+              </Text>
+            ) : null}
+
+            <View style={{ flexDirection: 'row', marginTop: 12 }}>
               <TouchableOpacity
                 onPress={() => navigation.navigate('EditConsultation', { id: item.id! })}
-                style={{ padding: 6, borderWidth: 1, borderRadius: 6, marginRight: 8 }}
+                style={{
+                  paddingVertical: 6,
+                  paddingHorizontal: 12,
+                  borderWidth: 1,
+                  borderRadius: 8,
+                  marginRight: 8,
+                  borderColor: colors.border
+                }}
               >
-                <Text>Editar</Text>
+                <Text style={{ color: colors.primaryText }}>Editar</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
@@ -91,9 +120,15 @@ export default function ConsultationsListScreen() {
                     ]
                   )
                 }}
-                style={{ padding: 6, borderWidth: 1, borderRadius: 6 }}
+                style={{
+                  paddingVertical: 6,
+                  paddingHorizontal: 12,
+                  borderWidth: 1,
+                  borderRadius: 8,
+                  borderColor: colors.border
+                }}
               >
-                <Text>Excluir</Text>
+                <Text style={{ color: colors.primaryText }}>Excluir</Text>
               </TouchableOpacity>
             </View>
           </View>
