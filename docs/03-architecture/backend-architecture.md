@@ -18,4 +18,4 @@
 - validação
 - regras de negócio
 - persistência
-- autenticação
+- autenticacao (futuro)

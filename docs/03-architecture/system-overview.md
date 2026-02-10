@@ -21,7 +21,7 @@ O Gateiro App é uma aplicação mobile focada em organização e cuidados com g
 ### Backend
 - regras de negócio
 - persistência de dados
-- autenticação
+- autenticacao (futuro)
 - processamento de lembretes
 
 ### Banco
