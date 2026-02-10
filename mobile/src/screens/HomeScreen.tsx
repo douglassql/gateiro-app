@@ -1,13 +1,12 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../navigation/types'
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
+import { RootTabParamList } from '../navigation/types'
 import { colors } from '@/theme/colors'
 import { typography } from '@/theme/typography'
 import ScreenContainer from '@/components/ScreenContainer'
 
-type NavigationProps =
-  NativeStackNavigationProp<RootStackParamList>
+type NavigationProps = BottomTabNavigationProp<RootTabParamList>
 
 export default function HomeScreen() {
   const navigation = useNavigation<NavigationProps>()
@@ -28,7 +27,7 @@ export default function HomeScreen() {
         </Text>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate('Menu')}
+          onPress={() => navigation.navigate('Pets')}
           style={{
             marginTop: 24,
             backgroundColor: colors.primaryText,

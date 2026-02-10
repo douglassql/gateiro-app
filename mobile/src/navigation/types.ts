@@ -1,6 +1,15 @@
-export type RootStackParamList = {
+import { NavigatorScreenParams } from '@react-navigation/native'
+
+export type RootTabParamList = {
   Home: undefined
-  Menu: undefined
+  Pets: undefined
+  Reminders: undefined
+  Content: undefined
+  Settings: undefined
+}
+
+export type RootStackParamList = {
+  Tabs: NavigatorScreenParams<RootTabParamList>
   Medications: undefined
   AddMedication: undefined
   Pets: undefined
@@ -11,7 +20,6 @@ export type RootStackParamList = {
   EditVaccine: { id: number }
   EditPet: { id: number }
   EditMedication: { id: number }
-  Reminders: undefined
   AddReminder: undefined
   EditReminder: { id: number }
 }

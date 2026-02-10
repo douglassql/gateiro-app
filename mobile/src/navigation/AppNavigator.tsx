@@ -1,10 +1,14 @@
 import { NavigationContainer } from '@react-navigation/native'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { RootStackParamList } from './types'
+import { RootStackParamList, RootTabParamList } from './types'
+import Ionicons from '@expo/vector-icons/Ionicons'
+import { colors } from '@/theme/colors'
 
 
 import HomeScreen from '../screens/HomeScreen'
-import MenuScreen from '../screens/MenuScreen'
+import ContentScreen from '../screens/ContentScreen'
+import SettingsScreen from '../screens/SettingsScreen'
 import MedicationListScreen from '../features/medications/screens/MedicationListScreen'
 import AddMedicationScreen from '../features/medications/screens/AddMedicationScreen'
 import EditMedicationScreen from '../features/medications/screens/EditMedicationScreen'
@@ -19,21 +23,59 @@ import RemindersListScreen from '../features/reminders/screens/RemindersListScre
 import AddReminderScreen from '../features/reminders/screens/AddReminderScreen'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
+const Tab = createBottomTabNavigator<RootTabParamList>()
+
+function MainTabs() {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarActiveTintColor: colors.accentPurple,
+        tabBarInactiveTintColor: colors.secondaryText,
+        tabBarStyle: {
+          backgroundColor: colors.card,
+          borderTopColor: colors.border
+        },
+        tabBarIcon: ({ color, size }) => {
+          const iconName = (() => {
+            switch (route.name) {
+              case 'Home':
+                return 'home-outline'
+              case 'Pets':
+                return 'paw-outline'
+              case 'Reminders':
+                return 'notifications-outline'
+              case 'Content':
+                return 'book-outline'
+              case 'Settings':
+                return 'settings-outline'
+              default:
+                return 'ellipse-outline'
+            }
+          })()
+
+          return <Ionicons name={iconName} size={size} color={color} />
+        }
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Pets" component={PetsListScreen} />
+      <Tab.Screen name="Reminders" component={RemindersListScreen} />
+      <Tab.Screen name="Content" component={ContentScreen} />
+      <Tab.Screen name="Settings" component={SettingsScreen} />
+    </Tab.Navigator>
+  )
+}
 
 
 export default function AppNavigator() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-
         <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-        />
-
-        <Stack.Screen
-          name="Menu"
-          component={MenuScreen}
+          name="Tabs"
+          component={MainTabs}
+          options={{ headerShown: false }}
         />
 
         <Stack.Screen
@@ -84,11 +126,6 @@ export default function AppNavigator() {
         <Stack.Screen
           name="EditVaccine"
           component={EditVaccineScreen}
-        />
-
-        <Stack.Screen
-          name="Reminders"
-          component={RemindersListScreen}
         />
 
         <Stack.Screen
