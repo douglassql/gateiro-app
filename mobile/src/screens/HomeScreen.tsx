@@ -1,35 +1,41 @@
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, TextInput, ScrollView } from 'react-native'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 import { RootTabParamList } from '../navigation/types'
 import { colors } from '@/theme/colors'
 import { typography } from '@/theme/typography'
 import ScreenContainer from '@/components/ScreenContainer'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { PetRepository } from '@/database/repositories/PetRepository'
 import { VaccineRepository } from '@/database/repositories/VaccineRepository'
 import { MedicationRepository } from '@/database/repositories/MedicationRepository'
 import { ReminderRepository } from '@/database/repositories/ReminderRepository'
 import { FoodStockRepository } from '@/database/repositories/FoodStockRepository'
 import { ConsultationRepository } from '@/database/repositories/ConsultationRepository'
+import { GateiroProfile, loadProfile, saveProfile } from '@/storage/profile'
+import * as ImagePicker from 'expo-image-picker'
 
 type NavigationProps = BottomTabNavigationProp<RootTabParamList>
 
-const FIRST_RUN_KEY = 'gateiro:first-run-seen'
-
 export default function HomeScreen() {
   const navigation = useNavigation<NavigationProps>()
-  const [hasSeenIntro, setHasSeenIntro] = useState(false)
-  const [summary, setSummary] = useState({
-    pets: 0,
-    vaccines: 0,
-    medications: 0,
-    reminders: 0,
-    foodStocks: 0,
-    consultations: 0,
-    nextVaccine: '' as string | null,
-    nextReminder: '' as string | null
+  const [profile, setProfile] = useState<GateiroProfile | null>(null)
+  const [draftName, setDraftName] = useState('')
+  const [draftPhoto, setDraftPhoto] = useState('')
+  const [petCards, setPetCards] = useState<Array<{
+    id: number
+    name: string
+    vaccines: number
+    medications: number
+    reminders: number
+    consultations: number
+    nextVaccine: string | null
+    nextReminder: string | null
+  }>>([])
+  const [foodSummary, setFoodSummary] = useState({
+    count: 0,
+    latestBrand: null as string | null,
+    latestPurchase: null as string | null
   })
 
   const loadSummary = useCallback(() => {
@@ -41,26 +47,50 @@ export default function HomeScreen() {
     const consultations = ConsultationRepository.findAll()
 
     const now = Date.now()
-    const upcomingVaccine = vaccines
-      .filter(v => v.next_date)
-      .map(v => new Date(v.next_date as string))
-      .filter(d => !Number.isNaN(d.getTime()) && d.getTime() >= now)
-      .sort((a, b) => a.getTime() - b.getTime())[0]
 
-    const upcomingReminder = reminders
-      .map(r => new Date(r.datetime))
-      .filter(d => !Number.isNaN(d.getTime()) && d.getTime() >= now)
-      .sort((a, b) => a.getTime() - b.getTime())[0]
+    const cards = pets.map(pet => {
+      const petVaccines = vaccines.filter(v => v.pet_id === pet.id)
+      const petMedications = medications.filter(m => m.pet_id === pet.id)
+      const petReminders = reminders.filter(r => r.pet_id === pet.id)
+      const petConsultations = consultations.filter(c => c.pet_id === pet.id)
 
-    setSummary({
-      pets: pets.length,
-      vaccines: vaccines.length,
-      medications: medications.length,
-      reminders: reminders.length,
-      foodStocks: foodStocks.length,
-      consultations: consultations.length,
-      nextVaccine: upcomingVaccine ? upcomingVaccine.toLocaleDateString('pt-BR') : null,
-      nextReminder: upcomingReminder ? upcomingReminder.toLocaleString('pt-BR') : null
+      const upcomingVaccine = petVaccines
+        .filter(v => v.next_date)
+        .map(v => new Date(v.next_date as string))
+        .filter(d => !Number.isNaN(d.getTime()) && d.getTime() >= now)
+        .sort((a, b) => a.getTime() - b.getTime())[0]
+
+      const upcomingReminder = petReminders
+        .map(r => new Date(r.datetime))
+        .filter(d => !Number.isNaN(d.getTime()) && d.getTime() >= now)
+        .sort((a, b) => a.getTime() - b.getTime())[0]
+
+      return {
+        id: pet.id as number,
+        name: pet.name,
+        vaccines: petVaccines.length,
+        medications: petMedications.length,
+        reminders: petReminders.length,
+        consultations: petConsultations.length,
+        nextVaccine: upcomingVaccine ? upcomingVaccine.toLocaleDateString('pt-BR') : null,
+        nextReminder: upcomingReminder ? upcomingReminder.toLocaleString('pt-BR') : null
+      }
+    })
+
+    const latestFood = foodStocks
+      .filter(fs => fs.purchase_date)
+      .map(fs => ({
+        brand: fs.brand,
+        date: new Date(fs.purchase_date as string)
+      }))
+      .filter(item => !Number.isNaN(item.date.getTime()))
+      .sort((a, b) => b.date.getTime() - a.date.getTime())[0]
+
+    setPetCards(cards)
+    setFoodSummary({
+      count: foodStocks.length,
+      latestBrand: latestFood ? latestFood.brand : null,
+      latestPurchase: latestFood ? latestFood.date.toLocaleDateString('pt-BR') : null
     })
   }, [])
 
@@ -73,10 +103,11 @@ export default function HomeScreen() {
   useFocusEffect(
     useCallback(() => {
       let active = true
-
-      AsyncStorage.getItem(FIRST_RUN_KEY).then(value => {
+      loadProfile().then(data => {
         if (!active) return
-        setHasSeenIntro(value === '1')
+        setProfile(data)
+        setDraftName(data?.name ?? '')
+        setDraftPhoto(data?.photoUri ?? '')
       })
 
       return () => {
@@ -85,16 +116,39 @@ export default function HomeScreen() {
     }, [])
   )
 
-  async function handleStart() {
-    await AsyncStorage.setItem(FIRST_RUN_KEY, '1')
-    setHasSeenIntro(true)
-    navigation.navigate('Pets')
+  const greeting = useMemo(() => {
+    if (!profile?.name) return 'Ola, gateiro'
+    return `Ola, ${profile.name}`
+  }, [profile?.name])
+
+  async function handlePickProfileImage() {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
+    if (status !== 'granted') return
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 0.8
+    })
+
+    if (!result.canceled && result.assets.length > 0) {
+      setDraftPhoto(result.assets[0].uri)
+    }
+  }
+
+  async function handleCreateProfile() {
+    if (!draftName.trim()) return
+    const nextProfile: GateiroProfile = {
+      name: draftName.trim(),
+      photoUri: draftPhoto || undefined
+    }
+    await saveProfile(nextProfile)
+    setProfile(nextProfile)
   }
 
   return (
     <ScreenContainer variant="home">
-      <View style={{ flex: 1, padding: 8 }}>
-        {!hasSeenIntro ? (
+      <ScrollView contentContainerStyle={{ padding: 8, paddingBottom: 24 }}>
+        {!profile ? (
           <View
             style={{
               borderRadius: 16,
@@ -105,10 +159,46 @@ export default function HomeScreen() {
               marginBottom: 16
             }}
           >
-            <Text style={typography.titleMedium}>Bem-vindo ao Gateiro</Text>
-            <Text style={[typography.body, { marginTop: 6 }]}>Organize vacinas, medicamentos e cuidados do seu gato.</Text>
+            <Text style={typography.titleMedium}>Criar perfil do gateiro</Text>
+            <Text style={[typography.body, { marginTop: 6 }]}>Adicione seu nome e uma foto para personalizar o app.</Text>
+            <View style={{ height: 12 }} />
+            <TextInput
+              placeholder="Seu nome"
+              value={draftName}
+              onChangeText={setDraftName}
+              style={{
+                borderWidth: 1,
+                borderColor: colors.border,
+                paddingVertical: 10,
+                paddingHorizontal: 12,
+                borderRadius: 8,
+                backgroundColor: '#FFF'
+              }}
+            />
+            <View style={{ height: 12 }} />
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+              <TouchableOpacity
+                onPress={handlePickProfileImage}
+                style={{
+                  paddingVertical: 10,
+                  paddingHorizontal: 12,
+                  borderRadius: 8,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                  backgroundColor: colors.card
+                }}
+              >
+                <Text style={{ color: colors.primaryText }}>Selecionar foto</Text>
+              </TouchableOpacity>
+              {draftPhoto ? (
+                <Image
+                  source={{ uri: draftPhoto }}
+                  style={{ width: 48, height: 48, borderRadius: 24 }}
+                />
+              ) : null}
+            </View>
             <TouchableOpacity
-              onPress={handleStart}
+              onPress={handleCreateProfile}
               style={{
                 marginTop: 12,
                 backgroundColor: colors.primaryText,
@@ -117,57 +207,114 @@ export default function HomeScreen() {
                 alignItems: 'center'
               }}
             >
-              <Text style={{ color: '#FFF', fontSize: 16 }}>Vamos comecar</Text>
+              <Text style={{ color: '#FFF', fontSize: 16 }}>Salvar perfil</Text>
             </TouchableOpacity>
           </View>
         ) : null}
 
-        <View style={{ flexDirection: 'row', gap: 12 }}>
-          <View style={{ flex: 1, padding: 12, borderRadius: 14, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={[typography.subtitle, { color: colors.primaryText }]}>Pets</Text>
-            <Text style={[typography.titleLarge, { marginTop: 4 }]}>{summary.pets}</Text>
+        <View
+          style={{
+            borderRadius: 16,
+            backgroundColor: colors.card,
+            borderWidth: 1,
+            borderColor: colors.border,
+            padding: 16,
+            marginBottom: 16,
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 12
+          }}
+        >
+          {profile?.photoUri ? (
+            <Image
+              source={{ uri: profile.photoUri }}
+              style={{ width: 56, height: 56, borderRadius: 28 }}
+            />
+          ) : (
+            <View
+              style={{
+                width: 56,
+                height: 56,
+                borderRadius: 28,
+                backgroundColor: colors.border,
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <Text style={{ color: colors.primaryText, fontSize: 18 }}>
+                {profile?.name ? profile.name.charAt(0).toUpperCase() : 'G'}
+              </Text>
+            </View>
+          )}
+          <View style={{ flex: 1 }}>
+            <Text style={typography.subtitle}>{greeting}</Text>
+            <Text style={[typography.body, { marginTop: 4 }]}>Resumo do seu dia com seus pets.</Text>
           </View>
-          <View style={{ flex: 1, padding: 12, borderRadius: 14, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={[typography.subtitle, { color: colors.primaryText }]}>Lembretes</Text>
-            <Text style={[typography.titleLarge, { marginTop: 4 }]}>{summary.reminders}</Text>
-          </View>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Settings')}
+            style={{
+              paddingVertical: 6,
+              paddingHorizontal: 10,
+              borderRadius: 8,
+              borderWidth: 1,
+              borderColor: colors.border
+            }}
+          >
+            <Text style={{ color: colors.primaryText }}>Editar</Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={{ flexDirection: 'row', gap: 12, marginTop: 12 }}>
-          <View style={{ flex: 1, padding: 12, borderRadius: 14, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={[typography.subtitle, { color: colors.primaryText }]}>Vacinas</Text>
-            <Text style={[typography.titleLarge, { marginTop: 4 }]}>{summary.vaccines}</Text>
+        <Text style={[typography.subtitle, { marginBottom: 8 }]}>Pets</Text>
+        {petCards.length === 0 ? (
+          <View style={{ padding: 14, borderRadius: 14, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }}>
+            <Text style={typography.body}>Nenhum pet cadastrado.</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Pets')} style={{ marginTop: 8 }}>
+              <Text style={{ color: colors.primaryText }}>Adicionar pet</Text>
+            </TouchableOpacity>
           </View>
-          <View style={{ flex: 1, padding: 12, borderRadius: 14, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={[typography.subtitle, { color: colors.primaryText }]}>Medicamentos</Text>
-            <Text style={[typography.titleLarge, { marginTop: 4 }]}>{summary.medications}</Text>
+        ) : (
+          <View style={{ gap: 12 }}>
+            {petCards.map(card => (
+              <View
+                key={card.id}
+                style={{
+                  borderRadius: 14,
+                  backgroundColor: colors.card,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                  padding: 14
+                }}
+              >
+                <Text style={[typography.subtitle, { marginBottom: 6 }]}>{card.name}</Text>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
+                  <Text style={typography.body}>Vacinas: {card.vaccines}</Text>
+                  <Text style={typography.body}>Medicamentos: {card.medications}</Text>
+                  <Text style={typography.body}>Lembretes: {card.reminders}</Text>
+                  <Text style={typography.body}>Consultas: {card.consultations}</Text>
+                </View>
+                <Text style={[typography.body, { marginTop: 8 }]}>Proxima vacina: {card.nextVaccine ?? 'Sem data'}</Text>
+                <Text style={[typography.body, { marginTop: 2 }]}>Proximo lembrete: {card.nextReminder ?? 'Sem data'}</Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Pets')}
+                  style={{ marginTop: 10 }}
+                >
+                  <Text style={{ color: colors.primaryText }}>Ver perfil</Text>
+                </TouchableOpacity>
+              </View>
+            ))}
           </View>
-        </View>
+        )}
 
-        <View style={{ flexDirection: 'row', gap: 12, marginTop: 12 }}>
-          <View style={{ flex: 1, padding: 12, borderRadius: 14, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={[typography.subtitle, { color: colors.primaryText }]}>Racao</Text>
-            <Text style={[typography.titleLarge, { marginTop: 4 }]}>{summary.foodStocks}</Text>
-          </View>
-          <View style={{ flex: 1, padding: 12, borderRadius: 14, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }}>
-            <Text style={[typography.subtitle, { color: colors.primaryText }]}>Consultas</Text>
-            <Text style={[typography.titleLarge, { marginTop: 4 }]}>{summary.consultations}</Text>
-          </View>
+        <View style={{ marginTop: 16, padding: 14, borderRadius: 14, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }}>
+          <Text style={[typography.subtitle, { marginBottom: 6 }]}>Racao (geral)</Text>
+          <Text style={typography.body}>Itens cadastrados: {foodSummary.count}</Text>
+          <Text style={[typography.body, { marginTop: 4 }]}>Ultima compra: {foodSummary.latestPurchase ?? 'Sem data'}</Text>
+          <Text style={[typography.body, { marginTop: 2 }]}>Marca: {foodSummary.latestBrand ?? 'Sem marca'}</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Settings')} style={{ marginTop: 8 }}>
+            <Text style={{ color: colors.primaryText }}>Gerenciar racao</Text>
+          </TouchableOpacity>
         </View>
-
-        <View style={{ marginTop: 16, padding: 12, borderRadius: 14, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }}>
-          <Text style={[typography.subtitle, { color: colors.primaryText }]}>Proximos eventos</Text>
-          <Text style={[typography.body, { marginTop: 6 }]}>Proxima vacina: {summary.nextVaccine ?? 'Sem data'}</Text>
-          <Text style={[typography.body, { marginTop: 4 }]}>Proximo lembrete: {summary.nextReminder ?? 'Sem data'}</Text>
-        </View>
-
-        <View style={{ alignItems: 'center', marginTop: 18 }}>
-          <Image
-            source={{ uri: 'https://images.unsplash.com/photo-1592790331635-35b079a277f1?q=80&w=600&auto=format&fit=crop' }}
-            style={{ width: 140, height: 140, borderRadius: 70, borderWidth: 4, borderColor: '#FFF' }}
-          />
-        </View>
-      </View>
+      </ScrollView>
     </ScreenContainer>
   )
 }
