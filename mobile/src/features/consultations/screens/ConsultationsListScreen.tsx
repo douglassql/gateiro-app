@@ -48,30 +48,18 @@ export default function ConsultationsListScreen() {
         }}
         style={{ marginBottom: 12 }}
       />
-                <View
-                  style={{
-                    marginTop: 8,
-                    alignSelf: 'flex-start',
-                    paddingVertical: 4,
-                    paddingHorizontal: 8,
-                    borderRadius: 12,
-                    backgroundColor: '#FFF',
-                    borderWidth: 1,
-                    borderColor: colors.border
-                  }}
-                >
-                  <Text style={{ color: colors.secondaryText, fontSize: 12 }}>Pet: {pet.name}</Text>
-                </View>
+      <FlatList
+        data={selectedPetId ? consultations.filter(c => c.pet_id === selectedPetId) : consultations}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <View
             style={{
-              <Text style={{ color: colors.secondaryText, marginTop: 10 }} numberOfLines={2}>
+              padding: 14,
               borderRadius: 14,
               borderWidth: 1,
               borderColor: colors.border,
               backgroundColor: colors.card,
-            <View style={{ flexDirection: 'row', marginTop: 14 }}>
+              marginBottom: 12
             }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -87,19 +75,30 @@ export default function ConsultationsListScreen() {
             {(() => {
               const pet = pets.find(p => p.id === item.pet_id)
               return pet ? (
-                <Text style={{ color: colors.secondaryText, marginTop: 6 }}>
-                  Pet: {pet.name}
-                </Text>
+                <View
+                  style={{
+                    marginTop: 8,
+                    alignSelf: 'flex-start',
+                    paddingVertical: 4,
+                    paddingHorizontal: 8,
+                    borderRadius: 12,
+                    backgroundColor: '#FFF',
+                    borderWidth: 1,
+                    borderColor: colors.border
+                  }}
+                >
+                  <Text style={{ color: colors.secondaryText, fontSize: 12 }}>Pet: {pet.name}</Text>
+                </View>
               ) : null
             })()}
 
             {item.notes ? (
-              <Text style={{ color: colors.secondaryText, marginTop: 6 }} numberOfLines={2}>
+              <Text style={{ color: colors.secondaryText, marginTop: 10 }} numberOfLines={2}>
                 Notas: {item.notes}
               </Text>
             ) : null}
 
-            <View style={{ flexDirection: 'row', marginTop: 12 }}>
+            <View style={{ flexDirection: 'row', marginTop: 14 }}>
               <TouchableOpacity
                 onPress={() => navigation.navigate('EditConsultation', { id: item.id! })}
                 style={{
