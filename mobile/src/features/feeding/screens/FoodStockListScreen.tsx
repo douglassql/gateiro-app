@@ -1,7 +1,5 @@
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native'
 import { useFoodStock } from '../hooks/useFoodStock'
-import { usePets } from '@/features/pets/hooks/usePets'
-import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '@/navigation/types'
@@ -13,8 +11,6 @@ import ScreenContainer from '@/components/ScreenContainer'
 
 export default function FoodStockListScreen() {
   const { items, reload } = useFoodStock()
-  const { pets } = usePets()
-  const [selectedPetId, setSelectedPetId] = useState<number | null>(null)
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
   function formatDate(d?: string) {
@@ -26,31 +22,7 @@ export default function FoodStockListScreen() {
   return (
     <ScreenContainer variant="list">
       <FlatList
-        data={pets}
-        keyExtractor={(item) => String(item.id)}
-        horizontal
-        renderItem={({ item }) => {
-          const selected = selectedPetId === item.id
-          return (
-            <TouchableOpacity
-              onPress={() => setSelectedPetId(selected ? null : (item.id as number))}
-              style={{
-                padding: 8,
-                marginRight: 8,
-                borderWidth: 1,
-                borderColor: selected ? colors.accentPurple : colors.border,
-                borderRadius: 6
-              }}
-            >
-              <Text>{item.name}</Text>
-            </TouchableOpacity>
-          )
-        }}
-        style={{ marginBottom: 12 }}
-      />
-
-      <FlatList
-        data={selectedPetId ? items.filter(i => i.pet_id === selectedPetId) : items}
+        data={items}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <View style={{ padding: 12, borderBottomWidth: 1 }}>
@@ -60,10 +32,6 @@ export default function FoodStockListScreen() {
                 {item.brand}
               </Text>
             </View>
-            {(() => {
-              const pet = pets.find(p => p.id === item.pet_id)
-              return pet ? <Text style={{ color: colors.secondaryText }}>Pet: {pet.name}</Text> : null
-            })()}
             <Text style={{ color: colors.secondaryText }}>
               Quantidade: {item.quantity_current} / {item.quantity_initial ?? '-'}
             </Text>

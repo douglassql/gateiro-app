@@ -1,12 +1,10 @@
-import { View, TextInput, Button, Text, FlatList, TouchableOpacity } from 'react-native'
+import { View, TextInput, Button, Text } from 'react-native'
 import { useState } from 'react'
 import { FoodStockRepository } from '@/database/repositories/FoodStockRepository'
 import { useNavigation } from '@react-navigation/native'
-import { usePets } from '@/features/pets/hooks/usePets'
-import { typography } from '@/theme/typography'
-import { colors } from '@/theme/colors'
 import ScreenContainer from '@/components/ScreenContainer'
 import Header from '@/components/Header'
+import DateField from '@/components/DateField'
 
 export default function AddFoodStockScreen() {
   const [brand, setBrand] = useState('')
@@ -14,15 +12,12 @@ export default function AddFoodStockScreen() {
   const [quantityInitial, setQuantityInitial] = useState('')
   const [purchaseDate, setPurchaseDate] = useState('')
   const [estimatedEnd, setEstimatedEnd] = useState('')
-  const [selectedPetId, setSelectedPetId] = useState<number | null>(null)
   const navigation = useNavigation()
-  const { pets } = usePets()
 
   function handleSave() {
-    if (!selectedPetId || !brand || !quantityCurrent) return
+    if (!brand || !quantityCurrent) return
 
     FoodStockRepository.create({
-      pet_id: selectedPetId,
       brand,
       quantity_current: Number(quantityCurrent),
       quantity_initial: quantityInitial ? Number(quantityInitial) : undefined,
@@ -35,32 +30,6 @@ export default function AddFoodStockScreen() {
   return (
     <ScreenContainer variant="form">
       <Header icon="restaurant-outline" title="Nova compra de racao" />
-
-      <Text style={[typography.body, { marginBottom: 8 }]}>Selecione o pet:</Text>
-      <FlatList
-        data={pets}
-        keyExtractor={(item) => String(item.id)}
-        horizontal
-        renderItem={({ item }) => {
-          const selected = selectedPetId === item.id
-          return (
-            <TouchableOpacity
-              onPress={() => setSelectedPetId(item.id!)}
-              style={{
-                padding: 8,
-                marginRight: 8,
-                borderWidth: 1,
-                borderColor: selected ? colors.accentPurple : colors.border,
-                borderRadius: 6
-              }}
-            >
-              <Text>{item.name}</Text>
-            </TouchableOpacity>
-          )
-        }}
-      />
-
-      <View style={{ height: 12 }} />
 
       <TextInput
         placeholder="Marca da racao"
@@ -88,22 +57,18 @@ export default function AddFoodStockScreen() {
 
       <View style={{ height: 8 }} />
 
-      <TextInput
-        placeholder="Data de compra (ISO opcional)"
+      <DateField
+        label="Data de compra (opcional)"
         value={purchaseDate}
-        onChangeText={setPurchaseDate}
-        autoCapitalize="none"
-        autoCorrect={false}
+        onChange={setPurchaseDate}
       />
 
       <View style={{ height: 8 }} />
 
-      <TextInput
-        placeholder="Previsao de termino (ISO opcional)"
+      <DateField
+        label="Previsao de termino (opcional)"
         value={estimatedEnd}
-        onChangeText={setEstimatedEnd}
-        autoCapitalize="none"
-        autoCorrect={false}
+        onChange={setEstimatedEnd}
       />
 
       <View style={{ height: 12 }} />

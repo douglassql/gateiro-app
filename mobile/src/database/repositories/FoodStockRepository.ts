@@ -3,12 +3,13 @@ import { FoodStock } from '../models/FoodStock'
 
 export const FoodStockRepository = {
   create(item: FoodStock) {
+    const petId = item.pet_id ?? 0
     db.runSync(
       `INSERT INTO food_stock
        (pet_id, brand, quantity_current, quantity_initial, purchase_date, estimated_end)
        VALUES (?, ?, ?, ?, ?, ?)`,
       [
-        item.pet_id,
+        petId,
         item.brand,
         item.quantity_current,
         item.quantity_initial ?? null,
@@ -29,12 +30,13 @@ export const FoodStockRepository = {
 
   update(item: FoodStock) {
     if (!item.id) throw new Error('id e obrigatorio para atualizar estoque')
+    const petId = item.pet_id ?? 0
     db.runSync(
       `UPDATE food_stock
        SET pet_id = ?, brand = ?, quantity_current = ?, quantity_initial = ?, purchase_date = ?, estimated_end = ?
        WHERE id = ?`,
       [
-        item.pet_id,
+        petId,
         item.brand,
         item.quantity_current,
         item.quantity_initial ?? null,
