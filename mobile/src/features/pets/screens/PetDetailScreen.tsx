@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { PetRepository } from '@/database/repositories/PetRepository'
@@ -47,9 +47,13 @@ export default function PetDetailScreen() {
       <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
         <Header icon="paw-outline" title="Perfil do pet" />
 
-        <View style={{ borderRadius: 16, overflow: 'hidden', marginBottom: 12 }}>
+        <View style={{ borderRadius: 16, overflow: 'hidden', marginBottom: 12, backgroundColor: colors.card }}>
           <Image
-            source={{ uri: 'https://images.unsplash.com/photo-1555685812-4b74352c2c0f?q=80&w=800&auto=format&fit=crop' }}
+            source={{
+              uri: pet.photo_uri
+                ? pet.photo_uri
+                : 'https://images.unsplash.com/photo-1555685812-4b74352c2c0f?q=80&w=800&auto=format&fit=crop'
+            }}
             style={{ width: '100%', height: 220 }}
           />
         </View>
@@ -78,6 +82,16 @@ export default function PetDetailScreen() {
 
         <Text style={[typography.body, { marginBottom: 16 }]}>Use este perfil para acompanhar saude, alimentacao e rotina.</Text>
 
+        <Text style={[typography.subtitle, { marginBottom: 6 }]}>Caracteristicas</Text>
+        <Text style={[typography.body, { marginBottom: 12 }]}>
+          {pet.traits && pet.traits.trim().length > 0 ? pet.traits : 'Nao informado'}
+        </Text>
+
+        <Text style={[typography.subtitle, { marginBottom: 6 }]}>Sobre</Text>
+        <Text style={[typography.body, { marginBottom: 16 }]}>
+          {pet.notes && pet.notes.trim().length > 0 ? pet.notes : 'Nao informado'}
+        </Text>
+
         <Text style={[typography.subtitle, { marginBottom: 8 }]}>Acessos rapidos</Text>
         <View style={{ gap: 12 }}>
           <CardButton
@@ -97,12 +111,6 @@ export default function PetDetailScreen() {
             title="Lembretes"
             subtitle="Rotina e avisos"
             onPress={() => navigation.navigate('Tabs', { screen: 'Reminders' })}
-          />
-          <CardButton
-            iconName="restaurant-outline"
-            title="Alimentacao"
-            subtitle="Em breve"
-            onPress={() => Alert.alert('Em breve', 'Controle de alimentacao sera adicionado em breve.')}
           />
         </View>
       </ScrollView>

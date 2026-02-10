@@ -10,6 +10,9 @@ export function runMigrations() {
       name TEXT NOT NULL,
       birth_date TEXT,
       weight REAL,
+      photo_uri TEXT,
+      traits TEXT,
+      notes TEXT,
       created_at TEXT DEFAULT CURRENT_TIMESTAMP
     );
   `)

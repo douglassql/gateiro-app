@@ -3,4 +3,7 @@ export interface Pet {
   name: string
   birth_date?: string
   weight?: number
+  photo_uri?: string
+  traits?: string
+  notes?: string
 }
