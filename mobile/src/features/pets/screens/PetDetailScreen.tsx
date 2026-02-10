@@ -1,9 +1,14 @@
-import { View, Text, Image } from 'react-native'
-import { useRoute } from '@react-navigation/native'
+import { View, Text, Image, ScrollView, TouchableOpacity, Alert } from 'react-native'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { PetRepository } from '@/database/repositories/PetRepository'
 import Chip from '@/components/Chip'
 import { colors } from '@/theme/colors'
 import { typography } from '@/theme/typography'
+import ScreenContainer from '@/components/ScreenContainer'
+import Header from '@/components/Header'
+import CardButton from '@/components/CardButton'
+import { RootStackParamList } from '@/navigation/types'
 
 type RouteParams = {
   id: number
@@ -22,21 +27,26 @@ function getAgeGroup(birth?: string) {
 export default function PetDetailScreen() {
   const route = useRoute()
   const { id } = route.params as unknown as RouteParams
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const pet = PetRepository.findById(id)
 
   if (!pet) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Pet não encontrado</Text>
-      </View>
+      <ScreenContainer variant="detail">
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Text>Pet nao encontrado</Text>
+        </View>
+      </ScreenContainer>
     )
   }
 
   const ageGroup = getAgeGroup(pet.birth_date)
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background }}>
-      <View style={{ padding: 16 }}>
+    <ScreenContainer variant="detail">
+      <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
+        <Header icon="paw-outline" title="Perfil do pet" />
+
         <View style={{ borderRadius: 16, overflow: 'hidden', marginBottom: 12 }}>
           <Image
             source={{ uri: 'https://images.unsplash.com/photo-1555685812-4b74352c2c0f?q=80&w=800&auto=format&fit=crop' }}
@@ -44,20 +54,58 @@ export default function PetDetailScreen() {
           />
         </View>
 
-        <Text style={[typography.titleMedium, { marginBottom: 8 }]}>{pet.name}</Text>
-
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 12 }}>
-          <Chip label={ageGroup} />
-          {pet.weight != null ? <Chip label={`${pet.weight} kg`} /> : null}
-          <Chip label="Carinhoso" />
-          <Chip label="Brincalhão" />
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Text style={typography.titleMedium}>{pet.name}</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('EditPet', { id })}
+            style={{
+              paddingVertical: 6,
+              paddingHorizontal: 12,
+              borderRadius: 8,
+              borderWidth: 1,
+              borderColor: colors.border,
+              backgroundColor: colors.card
+            }}
+          >
+            <Text style={{ color: colors.primaryText }}>Editar</Text>
+          </TouchableOpacity>
         </View>
 
-        <Text style={typography.body}>
-          Olá, eu sou {pet.name}! Gato muito especial e companheiro.
-          Use este perfil para acompanhar saúde, vacinas e rotina.
-        </Text>
-      </View>
-    </View>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginBottom: 12, marginTop: 8 }}>
+          <Chip label={ageGroup} />
+          {pet.weight != null ? <Chip label={`${pet.weight} kg`} /> : null}
+        </View>
+
+        <Text style={[typography.body, { marginBottom: 16 }]}>Use este perfil para acompanhar saude, alimentacao e rotina.</Text>
+
+        <Text style={[typography.subtitle, { marginBottom: 8 }]}>Acessos rapidos</Text>
+        <View style={{ gap: 12 }}>
+          <CardButton
+            iconName="shield-checkmark-outline"
+            title="Vacinas"
+            subtitle="Historico e proximas doses"
+            onPress={() => navigation.navigate('Vaccines')}
+          />
+          <CardButton
+            iconName="medkit-outline"
+            title="Medicamentos"
+            subtitle="Controle de tratamentos"
+            onPress={() => navigation.navigate('Medications')}
+          />
+          <CardButton
+            iconName="notifications-outline"
+            title="Lembretes"
+            subtitle="Rotina e avisos"
+            onPress={() => navigation.navigate('Tabs', { screen: 'Reminders' })}
+          />
+          <CardButton
+            iconName="restaurant-outline"
+            title="Alimentacao"
+            subtitle="Em breve"
+            onPress={() => Alert.alert('Em breve', 'Controle de alimentacao sera adicionado em breve.')}
+          />
+        </View>
+      </ScrollView>
+    </ScreenContainer>
   )
 }
