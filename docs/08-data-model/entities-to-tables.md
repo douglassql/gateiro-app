@@ -1,5 +1,11 @@
 # Entities to Tables
 
+## Convencao de nomes
+
+- Dominio: PT-BR em camelCase (ex.: dataNascimento)
+- Banco: EN em snake_case (ex.: birth_date)
+- A camada de mapeamento deve traduzir os nomes entre dominio e banco
+
 ## pets
 
 - id

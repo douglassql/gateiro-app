@@ -39,7 +39,7 @@ Lembretes relacionados ao cuidado do pet.
 
 - id
 - petId
-- tipo (vacina | remedio | alimentacao | geral)
+- tipo (vaccine | medication | feeding | general)
 - dataHora
 - status
 
