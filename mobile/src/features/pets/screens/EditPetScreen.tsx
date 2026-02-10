@@ -1,4 +1,4 @@
-import { View, TextInput, Button, Image, TouchableOpacity, Text } from 'react-native'
+import { View, TextInput, Image, TouchableOpacity, Text } from 'react-native'
 import { useEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { PetRepository } from '@/database/repositories/PetRepository'
@@ -64,6 +64,16 @@ export default function EditPetScreen() {
     navigation.goBack()
   }
 
+  const inputStyle = {
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    backgroundColor: '#FFF',
+    color: colors.primaryText
+  } as const
+
   return (
     <ScreenContainer variant="form">
       <Header icon="paw-outline" title="Editar pet" />
@@ -71,6 +81,7 @@ export default function EditPetScreen() {
         placeholder="Nome"
         value={name}
         onChangeText={setName}
+        style={inputStyle}
       />
       <View style={{ height: 8 }} />
       <DateField
@@ -84,6 +95,7 @@ export default function EditPetScreen() {
         value={weight}
         onChangeText={setWeight}
         keyboardType="decimal-pad"
+        style={inputStyle}
       />
       <View style={{ height: 8 }} />
       <Text style={{ marginBottom: 6, color: colors.secondaryText }}>Foto (opcional)</Text>
@@ -113,6 +125,7 @@ export default function EditPetScreen() {
         placeholder="Caracteristicas (ex.: calmo, carinhoso)"
         value={traits}
         onChangeText={setTraits}
+        style={inputStyle}
       />
       <View style={{ height: 8 }} />
       <TextInput
@@ -121,9 +134,21 @@ export default function EditPetScreen() {
         onChangeText={setNotes}
         multiline
         numberOfLines={3}
+        textAlignVertical="top"
+        style={[inputStyle, { minHeight: 90 }]}
       />
       <View style={{ height: 12 }} />
-      <Button title="Salvar" onPress={handleSave} />
+      <TouchableOpacity
+        onPress={handleSave}
+        style={{
+          backgroundColor: colors.primaryText,
+          paddingVertical: 12,
+          borderRadius: 10,
+          alignItems: 'center'
+        }}
+      >
+        <Text style={{ color: '#FFF', fontSize: 16 }}>Salvar</Text>
+      </TouchableOpacity>
     </ScreenContainer>
   )
 }

@@ -1,4 +1,4 @@
-import { View, TextInput, Button, Image, TouchableOpacity, Text } from 'react-native'
+import { View, TextInput, Image, TouchableOpacity, Text } from 'react-native'
 import { useState } from 'react'
 import { PetRepository } from '@/database/repositories/PetRepository'
 import { useNavigation } from '@react-navigation/native'
@@ -44,6 +44,16 @@ export default function AddPetScreen() {
     navigation.goBack()
   }
 
+  const inputStyle = {
+    borderWidth: 1,
+    borderColor: colors.border,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    backgroundColor: '#FFF',
+    color: colors.primaryText
+  } as const
+
   return (
     <ScreenContainer variant="form">
       <Header icon="paw-outline" title="Novo pet" />
@@ -51,6 +61,7 @@ export default function AddPetScreen() {
         placeholder="Nome do pet"
         value={name}
         onChangeText={setName}
+        style={inputStyle}
       />
       <View style={{ height: 8 }} />
       <DateField
@@ -64,6 +75,7 @@ export default function AddPetScreen() {
         value={weight}
         onChangeText={setWeight}
         keyboardType="decimal-pad"
+        style={inputStyle}
       />
       <View style={{ height: 8 }} />
       <Text style={{ marginBottom: 6, color: colors.secondaryText }}>Foto (opcional)</Text>
@@ -93,6 +105,7 @@ export default function AddPetScreen() {
         placeholder="Caracteristicas (ex.: calmo, carinhoso)"
         value={traits}
         onChangeText={setTraits}
+        style={inputStyle}
       />
       <View style={{ height: 8 }} />
       <TextInput
@@ -101,9 +114,21 @@ export default function AddPetScreen() {
         onChangeText={setNotes}
         multiline
         numberOfLines={3}
+        textAlignVertical="top"
+        style={[inputStyle, { minHeight: 90 }]}
       />
       <View style={{ height: 12 }} />
-      <Button title="Salvar" onPress={handleSave} />
+      <TouchableOpacity
+        onPress={handleSave}
+        style={{
+          backgroundColor: colors.primaryText,
+          paddingVertical: 12,
+          borderRadius: 10,
+          alignItems: 'center'
+        }}
+      >
+        <Text style={{ color: '#FFF', fontSize: 16 }}>Salvar</Text>
+      </TouchableOpacity>
     </ScreenContainer>
   )
 }
