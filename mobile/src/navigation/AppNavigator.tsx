@@ -9,6 +9,7 @@ import { colors } from '@/theme/colors'
 import HomeScreen from '../screens/HomeScreen'
 import ContentScreen from '../screens/ContentScreen'
 import SettingsScreen from '../screens/SettingsScreen'
+import CatFactsScreen from '../screens/CatFactsScreen'
 import MedicationListScreen from '../features/medications/screens/MedicationListScreen'
 import AddMedicationScreen from '../features/medications/screens/AddMedicationScreen'
 import EditMedicationScreen from '../features/medications/screens/EditMedicationScreen'
@@ -118,6 +119,11 @@ export default function AppNavigator() {
         <Stack.Screen
           name="PetDetail"
           component={PetDetailScreen}
+        />
+
+        <Stack.Screen
+          name="CatFacts"
+          component={CatFactsScreen}
         />
 
         <Stack.Screen

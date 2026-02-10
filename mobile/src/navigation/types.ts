@@ -15,6 +15,7 @@ export type RootStackParamList = {
   Pets: undefined
   AddPet: undefined
   PetDetail: { id: number }
+  CatFacts: undefined
   Vaccines: undefined
   AddVaccine: undefined
   EditVaccine: { id: number }
