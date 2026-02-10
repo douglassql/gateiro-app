@@ -124,6 +124,24 @@ export default function HomeScreen() {
     return `Ola, ${profile.name}`
   }, [profile?.name])
 
+  const accentPalette = ['#FDE68A', '#BAE6FD', '#FBCFE8', '#BBF7D0', '#FED7AA', '#DDD6FE']
+  const statBackgrounds = {
+    vaccines: '#F3E8FF',
+    medications: '#FEF3C7',
+    reminders: '#E0F2FE',
+    consultations: '#FCE7F3'
+  }
+  const statIconColors = {
+    vaccines: colors.accentPurple,
+    medications: colors.accentOrange,
+    reminders: '#0EA5E9',
+    consultations: '#EC4899'
+  }
+
+  function getAccentColor(id: number) {
+    return accentPalette[id % accentPalette.length]
+  }
+
   async function handlePickProfileImage() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
     if (status !== 'granted') return
@@ -280,88 +298,275 @@ export default function HomeScreen() {
               <View
                 key={card.id}
                 style={{
-                  borderRadius: 14,
+                  borderRadius: 16,
                   backgroundColor: colors.card,
                   borderWidth: 1,
                   borderColor: colors.border,
-                  padding: 14,
-                  marginBottom: 12
+                  marginBottom: 14,
+                  overflow: 'hidden'
                 }}
               >
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    {card.photoUri ? (
-                      <Image
-                        source={{ uri: card.photoUri }}
-                        style={{ width: 32, height: 32, borderRadius: 16, marginRight: 8 }}
-                      />
-                    ) : (
-                      <View
-                        style={{
-                          width: 32,
-                          height: 32,
-                          borderRadius: 16,
-                          backgroundColor: colors.card,
-                          borderWidth: 1,
-                          borderColor: colors.border,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          marginRight: 8
-                        }}
-                      >
-                        <Text style={{ color: colors.primaryText }}>
-                          {card.name.charAt(0).toUpperCase()}
-                        </Text>
+                <View style={{ height: 6, backgroundColor: getAccentColor(card.id) }} />
+                <View style={{ padding: 14 }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('Pets')}
+                      style={{ flexDirection: 'row', alignItems: 'center', flex: 1, marginRight: 8 }}
+                    >
+                      {card.photoUri ? (
+                        <Image
+                          source={{ uri: card.photoUri }}
+                          style={{ width: 40, height: 40, borderRadius: 20, marginRight: 10 }}
+                        />
+                      ) : (
+                        <View
+                          style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: 20,
+                            backgroundColor: colors.card,
+                            borderWidth: 1,
+                            borderColor: colors.border,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginRight: 10
+                          }}
+                        >
+                          <Ionicons name="paw-outline" size={18} color={colors.primaryText} />
+                        </View>
+                      )}
+                      <View>
+                        <Text style={typography.subtitle} numberOfLines={1}>{card.name}</Text>
+                        <Text style={[typography.body, { marginTop: 2 }]}>Resumo rapido</Text>
                       </View>
-                    )}
-                    <Text style={[typography.subtitle, { marginBottom: 6 }]}>{card.name}</Text>
+                    </TouchableOpacity>
+                    <View
+                      style={{
+                        paddingVertical: 4,
+                        paddingHorizontal: 10,
+                        borderRadius: 12,
+                        backgroundColor: getAccentColor(card.id)
+                      }}
+                    >
+                      <Text style={{ fontSize: 12, color: colors.primaryText }}>Pet</Text>
+                    </View>
                   </View>
-                  <Ionicons name="paw-outline" size={18} color={colors.accentPurple} />
+
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 12 }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingVertical: 8,
+                        paddingHorizontal: 10,
+                        borderRadius: 12,
+                        backgroundColor: statBackgrounds.vaccines,
+                        marginRight: 8,
+                        marginBottom: 8
+                      }}
+                    >
+                      <Ionicons name="shield-checkmark-outline" size={16} color={statIconColors.vaccines} />
+                      <Text style={[typography.body, { marginLeft: 6 }]}>Vacinas {card.vaccines}</Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingVertical: 8,
+                        paddingHorizontal: 10,
+                        borderRadius: 12,
+                        backgroundColor: statBackgrounds.medications,
+                        marginRight: 8,
+                        marginBottom: 8
+                      }}
+                    >
+                      <Ionicons name="medkit-outline" size={16} color={statIconColors.medications} />
+                      <Text style={[typography.body, { marginLeft: 6 }]}>Medicamentos {card.medications}</Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingVertical: 8,
+                        paddingHorizontal: 10,
+                        borderRadius: 12,
+                        backgroundColor: statBackgrounds.reminders,
+                        marginRight: 8,
+                        marginBottom: 8
+                      }}
+                    >
+                      <Ionicons name="notifications-outline" size={16} color={statIconColors.reminders} />
+                      <Text style={[typography.body, { marginLeft: 6 }]}>Lembretes {card.reminders}</Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingVertical: 8,
+                        paddingHorizontal: 10,
+                        borderRadius: 12,
+                        backgroundColor: statBackgrounds.consultations,
+                        marginRight: 8,
+                        marginBottom: 8
+                      }}
+                    >
+                      <Ionicons name="calendar-outline" size={16} color={statIconColors.consultations} />
+                      <Text style={[typography.body, { marginLeft: 6 }]}>Consultas {card.consultations}</Text>
+                    </View>
+                  </View>
+
+                  <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 4 }}>
+                    <View
+                      style={{
+                        paddingVertical: 6,
+                        paddingHorizontal: 10,
+                        borderRadius: 12,
+                        backgroundColor: '#FFF',
+                        borderWidth: 1,
+                        borderColor: colors.border,
+                        marginRight: 8,
+                        marginBottom: 8
+                      }}
+                    >
+                      <Text style={{ fontSize: 12, color: colors.secondaryText }}>
+                        Proxima vacina: {card.nextVaccine ?? 'Sem data'}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        paddingVertical: 6,
+                        paddingHorizontal: 10,
+                        borderRadius: 12,
+                        backgroundColor: '#FFF',
+                        borderWidth: 1,
+                        borderColor: colors.border,
+                        marginRight: 8,
+                        marginBottom: 8
+                      }}
+                    >
+                      <Text style={{ fontSize: 12, color: colors.secondaryText }}>
+                        Proximo lembrete: {card.nextReminder ?? 'Sem data'}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View style={{ flexDirection: 'row', marginTop: 6 }}>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('Pets')}
+                      style={{
+                        paddingVertical: 8,
+                        paddingHorizontal: 12,
+                        borderRadius: 10,
+                        borderWidth: 1,
+                        borderColor: colors.border,
+                        marginRight: 8
+                      }}
+                    >
+                      <Text style={{ color: colors.primaryText }}>Ver perfil</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('Reminders')}
+                      style={{
+                        paddingVertical: 8,
+                        paddingHorizontal: 12,
+                        borderRadius: 10,
+                        borderWidth: 1,
+                        borderColor: colors.border
+                      }}
+                    >
+                      <Text style={{ color: colors.primaryText }}>Lembretes</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 10, marginBottom: 6 }}>
-                    <Ionicons name="shield-checkmark-outline" size={14} color={colors.accentPurple} />
-                    <Text style={typography.body}>Vacinas: {card.vaccines}</Text>
-                  </View>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 10, marginBottom: 6 }}>
-                    <Ionicons name="medkit-outline" size={14} color={colors.accentPurple} />
-                    <Text style={typography.body}>Medicamentos: {card.medications}</Text>
-                  </View>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 10, marginBottom: 6 }}>
-                    <Ionicons name="notifications-outline" size={14} color={colors.accentPurple} />
-                    <Text style={typography.body}>Lembretes: {card.reminders}</Text>
-                  </View>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 10, marginBottom: 6 }}>
-                    <Ionicons name="calendar-outline" size={14} color={colors.accentPurple} />
-                    <Text style={typography.body}>Consultas: {card.consultations}</Text>
-                  </View>
-                </View>
-                <View style={{ marginTop: 8 }}>
-                  <Text style={typography.body}>Proxima vacina: {card.nextVaccine ?? 'Sem data'}</Text>
-                  <Text style={[typography.body, { marginTop: 2 }]}>Proximo lembrete: {card.nextReminder ?? 'Sem data'}</Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('Pets')}
-                  style={{ marginTop: 10 }}
-                >
-                  <Text style={{ color: colors.primaryText }}>Ver perfil</Text>
-                </TouchableOpacity>
               </View>
             ))}
           </View>
         )}
 
-        <View style={{ marginTop: 16, padding: 14, borderRadius: 14, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Text style={[typography.subtitle, { marginBottom: 6 }]}>Racao (geral)</Text>
-            <Ionicons name="restaurant-outline" size={18} color={colors.accentOrange} />
+        <View
+          style={{
+            marginTop: 16,
+            borderRadius: 16,
+            backgroundColor: colors.card,
+            borderWidth: 1,
+            borderColor: colors.border,
+            overflow: 'hidden'
+          }}
+        >
+          <View style={{ height: 6, backgroundColor: colors.accentOrange }} />
+          <View style={{ padding: 14 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <View>
+                <Text style={typography.subtitle}>Racao (geral)</Text>
+                <Text style={[typography.body, { marginTop: 2 }]}>Estoque e compras recentes</Text>
+              </View>
+              <Ionicons name="restaurant-outline" size={20} color={colors.accentOrange} />
+            </View>
+
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', marginTop: 10 }}>
+              <View
+                style={{
+                  paddingVertical: 8,
+                  paddingHorizontal: 10,
+                  borderRadius: 12,
+                  backgroundColor: '#FFF',
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                  marginRight: 8,
+                  marginBottom: 8
+                }}
+              >
+                <Text style={{ fontSize: 12, color: colors.secondaryText }}>Itens: {foodSummary.count}</Text>
+              </View>
+              <View
+                style={{
+                  paddingVertical: 8,
+                  paddingHorizontal: 10,
+                  borderRadius: 12,
+                  backgroundColor: '#FFF',
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                  marginRight: 8,
+                  marginBottom: 8
+                }}
+              >
+                <Text style={{ fontSize: 12, color: colors.secondaryText }}>
+                  Ultima compra: {foodSummary.latestPurchase ?? 'Sem data'}
+                </Text>
+              </View>
+              <View
+                style={{
+                  paddingVertical: 8,
+                  paddingHorizontal: 10,
+                  borderRadius: 12,
+                  backgroundColor: '#FFF',
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                  marginRight: 8,
+                  marginBottom: 8
+                }}
+              >
+                <Text style={{ fontSize: 12, color: colors.secondaryText }}>
+                  Marca: {foodSummary.latestBrand ?? 'Sem marca'}
+                </Text>
+              </View>
+            </View>
+
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Settings')}
+              style={{
+                marginTop: 8,
+                paddingVertical: 10,
+                paddingHorizontal: 12,
+                borderRadius: 10,
+                borderWidth: 1,
+                borderColor: colors.border,
+                alignSelf: 'flex-start'
+              }}
+            >
+              <Text style={{ color: colors.primaryText }}>Gerenciar racao</Text>
+            </TouchableOpacity>
           </View>
-          <Text style={typography.body}>Itens cadastrados: {foodSummary.count}</Text>
-          <Text style={[typography.body, { marginTop: 4 }]}>Ultima compra: {foodSummary.latestPurchase ?? 'Sem data'}</Text>
-          <Text style={[typography.body, { marginTop: 2 }]}>Marca: {foodSummary.latestBrand ?? 'Sem marca'}</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('Settings')} style={{ marginTop: 8 }}>
-            <Text style={{ color: colors.primaryText }}>Gerenciar racao</Text>
-          </TouchableOpacity>
         </View>
       </ScrollView>
     </ScreenContainer>
