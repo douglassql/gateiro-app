@@ -477,7 +477,7 @@ export default function HomeScreen() {
                       <Text style={{ color: colors.primaryText }}>Ver perfil</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate('Reminders')}
+                      onPress={() => navigation.navigate('Reminders', { petId: card.id })}
                       style={{
                         paddingVertical: 8,
                         paddingHorizontal: 12,

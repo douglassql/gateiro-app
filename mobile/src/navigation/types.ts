@@ -3,7 +3,7 @@ import { NavigatorScreenParams } from '@react-navigation/native'
 export type RootTabParamList = {
   Home: undefined
   Pets: undefined
-  Reminders: undefined
+  Reminders: { petId?: number } | undefined
   Content: undefined
   Settings: undefined
 }

@@ -149,7 +149,7 @@ export default function PetDetailScreen() {
             iconName="notifications-outline"
             title="Lembretes"
             subtitle="Rotina e avisos"
-            onPress={() => navigation.navigate('Tabs', { screen: 'Reminders' })}
+            onPress={() => navigation.navigate('Tabs', { screen: 'Reminders', params: { petId: id } })}
           />
           <View style={{ height: 12 }} />
           <CardButton

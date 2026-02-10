@@ -1,7 +1,7 @@
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from '@/navigation/types'
+import { RootStackParamList, RootTabParamList } from '@/navigation/types'
 import { useReminders } from '../hooks/useReminders'
 import { ReminderRepository } from '@/database/repositories/ReminderRepository'
 import { reminderTypeLabels } from '@/database/models/Reminder'
@@ -10,16 +10,69 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { colors } from '@/theme/colors'
 import { usePets } from '@/features/pets/hooks/usePets'
 import ScreenContainer from '@/components/ScreenContainer'
+import { useEffect, useMemo, useState } from 'react'
 
 export default function RemindersListScreen() {
   const { reminders, reload } = useReminders()
   const { pets } = usePets()
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+  const route = useRoute<RouteProp<RootTabParamList, 'Reminders'>>()
+  const [selectedPetId, setSelectedPetId] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (route.params?.petId != null) {
+      setSelectedPetId(route.params.petId)
+    }
+  }, [route.params?.petId])
+
+  const filteredReminders = useMemo(() => {
+    if (!selectedPetId) return reminders
+    return reminders.filter(r => r.pet_id === selectedPetId)
+  }, [reminders, selectedPetId])
 
   return (
     <ScreenContainer variant="list">
+      <View style={{ flexDirection: 'row', marginBottom: 12 }}>
+        <TouchableOpacity
+          onPress={() => setSelectedPetId(null)}
+          style={{
+            paddingVertical: 6,
+            paddingHorizontal: 10,
+            borderRadius: 14,
+            borderWidth: 1,
+            borderColor: selectedPetId === null ? colors.accentPurple : colors.border,
+            marginRight: 6
+          }}
+        >
+          <Text style={{ color: colors.primaryText }}>Todos</Text>
+        </TouchableOpacity>
+        <FlatList
+          data={pets}
+          keyExtractor={(item) => String(item.id)}
+          horizontal
+          renderItem={({ item }) => {
+            const selected = selectedPetId === item.id
+            return (
+              <TouchableOpacity
+                onPress={() => setSelectedPetId(item.id as number)}
+                style={{
+                  paddingVertical: 6,
+                  paddingHorizontal: 10,
+                  borderRadius: 14,
+                  borderWidth: 1,
+                  borderColor: selected ? colors.accentPurple : colors.border,
+                  marginRight: 6
+                }}
+              >
+                <Text style={{ color: colors.primaryText }}>{item.name}</Text>
+              </TouchableOpacity>
+            )
+          }}
+          showsHorizontalScrollIndicator={false}
+        />
+      </View>
       <FlatList
-        data={reminders}
+        data={filteredReminders}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <View
