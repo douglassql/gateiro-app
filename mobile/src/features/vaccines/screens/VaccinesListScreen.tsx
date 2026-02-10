@@ -57,31 +57,18 @@ export default function VaccinesListScreen() {
           )
         }}
         style={{ marginBottom: 12 }}
-              return pet ? (
-                <View
-                  style={{
-                    marginTop: 8,
-                    alignSelf: 'flex-start',
-                    paddingVertical: 4,
-                    paddingHorizontal: 8,
-                    borderRadius: 12,
-                    backgroundColor: '#FFF',
-                    borderWidth: 1,
-                    borderColor: colors.border
-                  }}
-                >
-                  <Text style={{ color: colors.secondaryText, fontSize: 12 }}>Pet: {pet.name}</Text>
-                </View>
-              ) : null
+      />
+
+      <FlatList
         data={(selectedPetId
           ? vaccines.filter(v => v.pet_id === selectedPetId)
           : vaccines
-              <Text style={{ color: colors.secondaryText, marginTop: 10 }} numberOfLines={2}>
+        )
           .slice()
           .sort((a, b) => {
             const ad = parseDateSafe(a.next_date)
             const bd = parseDateSafe(b.next_date)
-            <View style={{ flexDirection: 'row', marginTop: 14 }}>
+            if (ad && bd) {
               const diff = ad.getTime() - bd.getTime()
               if (diff !== 0) return diff
               return a.name.localeCompare(b.name)
@@ -117,17 +104,30 @@ export default function VaccinesListScreen() {
             {(() => {
               const pet = pets.find(p => p.id === item.pet_id)
               return pet ? (
-                <Text style={{ color: colors.secondaryText, marginTop: 6 }}>Pet: {pet.name}</Text>
+                <View
+                  style={{
+                    marginTop: 8,
+                    alignSelf: 'flex-start',
+                    paddingVertical: 4,
+                    paddingHorizontal: 8,
+                    borderRadius: 12,
+                    backgroundColor: '#FFF',
+                    borderWidth: 1,
+                    borderColor: colors.border
+                  }}
+                >
+                  <Text style={{ color: colors.secondaryText, fontSize: 12 }}>Pet: {pet.name}</Text>
+                </View>
               ) : null
             })()}
 
             {item.notes ? (
-              <Text style={{ color: colors.secondaryText, marginTop: 6 }} numberOfLines={2}>
+              <Text style={{ color: colors.secondaryText, marginTop: 10 }} numberOfLines={2}>
                 Notas: {item.notes}
               </Text>
             ) : null}
 
-            <View style={{ flexDirection: 'row', marginTop: 12 }}>
+            <View style={{ flexDirection: 'row', marginTop: 14 }}>
               <TouchableOpacity
                 onPress={() => navigation.navigate('EditVaccine', { id: item.id! })}
                 style={{
