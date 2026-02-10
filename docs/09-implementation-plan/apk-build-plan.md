@@ -1,5 +1,8 @@
 # APK Build Plan
 
+Este documento resume o fluxo. As instrucoes completas ficam em
+docs/04-mobile/build-android-offline.md.
+
 ## Preparação
 
 - instalar Expo CLI
@@ -8,8 +11,7 @@
 
 ## Build
 
-npx expo prebuild
-npx expo run:android
+Usar o fluxo padrao definido na documentacao mobile.
 
 ## Testes
 
