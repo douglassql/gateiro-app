@@ -7,6 +7,7 @@ import { typography } from '@/theme/typography'
 import { colors } from '@/theme/colors'
 import ScreenContainer from '@/components/ScreenContainer'
 import Header from '@/components/Header'
+import DateField from '@/components/DateField'
 
 export default function AddConsultationScreen() {
   const [title, setTitle] = useState('')
@@ -66,12 +67,10 @@ export default function AddConsultationScreen() {
 
       <View style={{ height: 8 }} />
 
-      <TextInput
-        placeholder="Data (ISO)"
+      <DateField
+        label="Data"
         value={date}
-        onChangeText={setDate}
-        autoCapitalize="none"
-        autoCorrect={false}
+        onChange={setDate}
       />
 
       <View style={{ height: 8 }} />

@@ -10,6 +10,7 @@ import { colors } from '@/theme/colors'
 import * as Notifications from 'expo-notifications'
 import ScreenContainer from '@/components/ScreenContainer'
 import Header from '@/components/Header'
+import DateField from '@/components/DateField'
 
 const TYPES: ReminderType[] = ['vaccine', 'medication', 'feeding', 'general']
 
@@ -104,12 +105,11 @@ export default function AddReminderScreen() {
       />
 
       <View style={{ height: 8 }} />
-      <TextInput
-        placeholder="Data e hora (ISO)"
+      <DateField
+        label="Data e hora"
         value={datetime}
-        onChangeText={setDatetime}
-        autoCapitalize="none"
-        autoCorrect={false}
+        mode="datetime"
+        onChange={setDatetime}
       />
 
       <View style={{ height: 12 }} />

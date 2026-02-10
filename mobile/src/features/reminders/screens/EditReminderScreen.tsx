@@ -8,6 +8,7 @@ import { typography } from '@/theme/typography'
 import { colors } from '@/theme/colors'
 import ScreenContainer from '@/components/ScreenContainer'
 import Header from '@/components/Header'
+import DateField from '@/components/DateField'
 
 type RouteParams = {
   id: number
@@ -102,12 +103,11 @@ export default function EditReminderScreen() {
       </View>
 
       <View style={{ height: 12 }} />
-      <TextInput
-        placeholder="Data e hora (ISO)"
+      <DateField
+        label="Data e hora"
         value={datetime}
-        onChangeText={setDatetime}
-        autoCapitalize="none"
-        autoCorrect={false}
+        mode="datetime"
+        onChange={setDatetime}
       />
 
       <View style={{ height: 12 }} />

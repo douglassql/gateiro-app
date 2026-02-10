@@ -8,6 +8,7 @@ import { typography } from '@/theme/typography'
 import { colors } from '@/theme/colors'
 import ScreenContainer from '@/components/ScreenContainer'
 import Header from '@/components/Header'
+import DateField from '@/components/DateField'
 
 export default function AddVaccineScreen() {
   const [name, setName] = useState('')
@@ -68,12 +69,10 @@ export default function AddVaccineScreen() {
 
       <View style={{ height: 8 }} />
 
-      <TextInput
-        placeholder="Próxima data (ISO opcional)"
+      <DateField
+        label="Proxima data (opcional)"
         value={nextDate}
-        onChangeText={setNextDate}
-        autoCapitalize="none"
-        autoCorrect={false}
+        onChange={setNextDate}
       />
 
       <View style={{ height: 8 }} />

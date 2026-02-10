@@ -8,6 +8,7 @@ import { typography } from '@/theme/typography'
 import { colors } from '@/theme/colors'
 import ScreenContainer from '@/components/ScreenContainer'
 import Header from '@/components/Header'
+import DateField from '@/components/DateField'
 
 type RouteParams = {
   id: number
@@ -86,12 +87,10 @@ export default function EditVaccineScreen() {
 
       <View style={{ height: 8 }} />
 
-      <TextInput
-        placeholder="Próxima data (ISO opcional)"
+      <DateField
+        label="Proxima data (opcional)"
         value={nextDate}
-        onChangeText={setNextDate}
-        autoCapitalize="none"
-        autoCorrect={false}
+        onChange={setNextDate}
       />
 
       <View style={{ height: 8 }} />
