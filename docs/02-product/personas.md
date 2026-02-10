@@ -5,11 +5,11 @@
 - Não entende calendário de vacinas
 - Precisa de orientação simples
 
-## Gateiro Experiente
-- Possui múltiplos gatos
-- Precisa organizar rotina de medicamentos
-- Busca controle detalhado
+## Gateiro Organizado
+- Possui vários gatos
+- Controla vacinação e medicamentos
+- Precisa de lembretes confiáveis
 
-## Gateiro Esquecido
-- Esquece datas importantes
-- Precisa de notificações automáticas
+## Gateiro Ocupado
+- Rotina corrida
+- Quer registrar tudo em poucos segundos

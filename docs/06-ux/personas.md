@@ -1,18 +1,15 @@
 # Personas
 
-## Gateiro Organizado
-
-- possui vários gatos
-- controla vacinação e medicamentos
-- precisa de lembretes confiáveis
-
 ## Gateiro Iniciante
+- Primeiro gato
+- Não entende calendário de vacinas
+- Precisa de orientação simples
 
-- adotou recentemente
-- tem dúvidas sobre cuidados
-- precisa de dicas simples
+## Gateiro Organizado
+- Possui vários gatos
+- Controla vacinação e medicamentos
+- Precisa de lembretes confiáveis
 
 ## Gateiro Ocupado
-
-- rotina corrida
-- quer registrar tudo em poucos segundos
+- Rotina corrida
+- Quer registrar tudo em poucos segundos
