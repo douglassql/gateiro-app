@@ -25,4 +25,7 @@ export type RootStackParamList = {
   FoodStock: undefined
   AddFoodStock: undefined
   EditFoodStock: { id: number }
+  Consultations: undefined
+  AddConsultation: undefined
+  EditConsultation: { id: number }
 }

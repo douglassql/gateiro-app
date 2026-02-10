@@ -118,6 +118,12 @@ export default function PetDetailScreen() {
             subtitle="Controle de racao"
             onPress={() => navigation.navigate('FoodStock')}
           />
+          <CardButton
+            iconName="calendar-outline"
+            title="Consultas"
+            subtitle="Historico veterinario"
+            onPress={() => navigation.navigate('Consultations')}
+          />
         </View>
       </ScrollView>
     </ScreenContainer>

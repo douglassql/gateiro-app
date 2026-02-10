@@ -25,6 +25,9 @@ import EditReminderScreen from '../features/reminders/screens/EditReminderScreen
 import FoodStockListScreen from '../features/feeding/screens/FoodStockListScreen'
 import AddFoodStockScreen from '../features/feeding/screens/AddFoodStockScreen'
 import EditFoodStockScreen from '../features/feeding/screens/EditFoodStockScreen'
+import ConsultationsListScreen from '../features/consultations/screens/ConsultationsListScreen'
+import AddConsultationScreen from '../features/consultations/screens/AddConsultationScreen'
+import EditConsultationScreen from '../features/consultations/screens/EditConsultationScreen'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 const Tab = createBottomTabNavigator<RootTabParamList>()
@@ -155,6 +158,21 @@ export default function AppNavigator() {
         <Stack.Screen
           name="EditFoodStock"
           component={EditFoodStockScreen}
+        />
+
+        <Stack.Screen
+          name="Consultations"
+          component={ConsultationsListScreen}
+        />
+
+        <Stack.Screen
+          name="AddConsultation"
+          component={AddConsultationScreen}
+        />
+
+        <Stack.Screen
+          name="EditConsultation"
+          component={EditConsultationScreen}
         />
 
 
