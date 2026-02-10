@@ -4,11 +4,12 @@ import { Reminder } from '../models/Reminder'
 export const ReminderRepository = {
   create(r: Reminder) {
     db.runSync(
-      `INSERT INTO reminders (pet_id, type, datetime, status)
-       VALUES (?, ?, ?, ?)`,
+      `INSERT INTO reminders (pet_id, type, title, datetime, status)
+       VALUES (?, ?, ?, ?, ?)`,
       [
         r.pet_id,
         r.type,
+        r.title ?? null,
         r.datetime,
         r.status ?? null
       ]
@@ -28,11 +29,12 @@ export const ReminderRepository = {
     if (!r.id) throw new Error('id é obrigatório para atualizar lembrete')
     db.runSync(
       `UPDATE reminders
-       SET pet_id = ?, type = ?, datetime = ?, status = ?
+       SET pet_id = ?, type = ?, title = ?, datetime = ?, status = ?
        WHERE id = ?`,
       [
         r.pet_id,
         r.type,
+        r.title ?? null,
         r.datetime,
         r.status ?? null,
         r.id

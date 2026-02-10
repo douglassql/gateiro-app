@@ -10,6 +10,7 @@ import { PetRepository } from '@/database/repositories/PetRepository'
 import { VaccineRepository } from '@/database/repositories/VaccineRepository'
 import { MedicationRepository } from '@/database/repositories/MedicationRepository'
 import { ReminderRepository } from '@/database/repositories/ReminderRepository'
+import { reminderTypeLabels } from '@/database/models/Reminder'
 import { FoodStockRepository } from '@/database/repositories/FoodStockRepository'
 import { ConsultationRepository } from '@/database/repositories/ConsultationRepository'
 import { GateiroProfile, loadProfile, saveProfile } from '@/storage/profile'
@@ -33,6 +34,7 @@ export default function HomeScreen() {
     consultations: number
     nextVaccine: string | null
     nextReminder: string | null
+    nextReminderLabel: string | null
   }>>([])
   const [foodSummary, setFoodSummary] = useState({
     count: 0,
@@ -63,9 +65,13 @@ export default function HomeScreen() {
         .sort((a, b) => a.getTime() - b.getTime())[0]
 
       const upcomingReminder = petReminders
-        .map(r => new Date(r.datetime))
-        .filter(d => !Number.isNaN(d.getTime()) && d.getTime() >= now)
-        .sort((a, b) => a.getTime() - b.getTime())[0]
+        .map(r => ({
+          date: new Date(r.datetime),
+          type: r.type,
+          title: r.title
+        }))
+        .filter(r => !Number.isNaN(r.date.getTime()) && r.date.getTime() >= now)
+        .sort((a, b) => a.date.getTime() - b.date.getTime())[0]
 
       return {
         id: pet.id as number,
@@ -76,7 +82,10 @@ export default function HomeScreen() {
         reminders: petReminders.length,
         consultations: petConsultations.length,
         nextVaccine: upcomingVaccine ? upcomingVaccine.toLocaleDateString('pt-BR') : null,
-        nextReminder: upcomingReminder ? upcomingReminder.toLocaleString('pt-BR') : null
+        nextReminder: upcomingReminder ? upcomingReminder.date.toLocaleString('pt-BR') : null,
+        nextReminderLabel: upcomingReminder
+          ? (upcomingReminder.title || reminderTypeLabels[upcomingReminder.type])
+          : null
       }
     })
 
@@ -432,22 +441,25 @@ export default function HomeScreen() {
                         Proxima vacina: {card.nextVaccine ?? 'Sem data'}
                       </Text>
                     </View>
-                    <View
-                      style={{
-                        paddingVertical: 6,
-                        paddingHorizontal: 10,
-                        borderRadius: 12,
-                        backgroundColor: '#FFF',
-                        borderWidth: 1,
-                        borderColor: colors.border,
-                        marginRight: 8,
-                        marginBottom: 8
-                      }}
-                    >
-                      <Text style={{ fontSize: 12, color: colors.secondaryText }}>
-                        Proximo lembrete: {card.nextReminder ?? 'Sem data'}
-                      </Text>
-                    </View>
+                  </View>
+
+                  <View
+                    style={{
+                      marginTop: 4,
+                      paddingVertical: 8,
+                      paddingHorizontal: 10,
+                      borderRadius: 12,
+                      backgroundColor: statBackgrounds.reminders,
+                      borderWidth: 1,
+                      borderColor: colors.border
+                    }}
+                  >
+                    <Text style={{ fontSize: 12, color: colors.primaryText }}>
+                      Proximo lembrete: {card.nextReminderLabel ?? 'Sem data'}
+                    </Text>
+                    <Text style={{ fontSize: 12, color: colors.secondaryText, marginTop: 2 }}>
+                      {card.nextReminder ?? 'Sem data'}
+                    </Text>
                   </View>
 
                   <View style={{ flexDirection: 'row', marginTop: 6 }}>

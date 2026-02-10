@@ -11,6 +11,7 @@ export interface Reminder {
   id?: number
   pet_id: number
   type: ReminderType
+  title?: string
   datetime: string
   status?: 'pendente' | 'feito' | 'cancelado'
 }

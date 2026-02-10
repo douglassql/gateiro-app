@@ -46,7 +46,7 @@ export default function RemindersListScreen() {
                   <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, marginRight: 8 }}>
                     <Ionicons name="notifications-outline" size={18} color={colors.accentPurple} style={{ marginRight: 8 }} />
                     <Text style={{ fontSize: 16, color: colors.primaryText }} numberOfLines={1}>
-                      {reminderTypeLabels[item.type]}
+                      {item.title || reminderTypeLabels[item.type]}
                     </Text>
                   </View>
                   <View
