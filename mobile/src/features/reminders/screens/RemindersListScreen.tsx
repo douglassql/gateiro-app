@@ -8,30 +8,62 @@ import { reminderTypeLabels } from '@/database/models/Reminder'
 import FAB from '@/components/FAB'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { colors } from '@/theme/colors'
+import { usePets } from '@/features/pets/hooks/usePets'
+import ScreenContainer from '@/components/ScreenContainer'
 
 export default function RemindersListScreen() {
   const { reminders, reload } = useReminders()
+  const { pets } = usePets()
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
   return (
-    <View style={{ flex: 1 }}>
+    <ScreenContainer variant="list">
       <FlatList
         data={reminders}
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
-          <View style={{ padding: 12, borderBottomWidth: 1 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Ionicons name="notifications-outline" size={18} color={colors.accentPurple} style={{ marginRight: 8 }} />
-              <Text style={{ fontSize: 16 }}>
-                {reminderTypeLabels[item.type]} • {new Date(item.datetime).toLocaleString('pt-BR')}
+          <View
+            style={{
+              padding: 14,
+              borderRadius: 14,
+              borderWidth: 1,
+              borderColor: colors.border,
+              backgroundColor: colors.card,
+              marginBottom: 12
+            }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Ionicons name="notifications-outline" size={18} color={colors.accentPurple} style={{ marginRight: 8 }} />
+                <Text style={{ fontSize: 16, color: colors.primaryText }} numberOfLines={1}>
+                  {reminderTypeLabels[item.type]}
+                </Text>
+              </View>
+              <Text style={{ color: colors.secondaryText, fontSize: 12 }}>
+                {new Date(item.datetime).toLocaleString('pt-BR')}
               </Text>
             </View>
-            <View style={{ flexDirection: 'row', marginTop: 8 }}>
+
+            {(() => {
+              const pet = pets.find(p => p.id === item.pet_id)
+              return pet ? (
+                <Text style={{ color: colors.secondaryText, marginTop: 6 }}>Pet: {pet.name}</Text>
+              ) : null
+            })()}
+
+            <View style={{ flexDirection: 'row', marginTop: 12 }}>
               <TouchableOpacity
                 onPress={() => navigation.navigate('EditReminder', { id: item.id! })}
-                style={{ padding: 6, borderWidth: 1, borderRadius: 6, marginRight: 8 }}
+                style={{
+                  paddingVertical: 6,
+                  paddingHorizontal: 12,
+                  borderWidth: 1,
+                  borderRadius: 8,
+                  marginRight: 8,
+                  borderColor: colors.border
+                }}
               >
-                <Text>Editar</Text>
+                <Text style={{ color: colors.primaryText }}>Editar</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
@@ -51,15 +83,21 @@ export default function RemindersListScreen() {
                     ]
                   )
                 }}
-                style={{ padding: 6, borderWidth: 1, borderRadius: 6 }}
+                style={{
+                  paddingVertical: 6,
+                  paddingHorizontal: 12,
+                  borderWidth: 1,
+                  borderRadius: 8,
+                  borderColor: colors.border
+                }}
               >
-                <Text>Excluir</Text>
+                <Text style={{ color: colors.primaryText }}>Excluir</Text>
               </TouchableOpacity>
             </View>
           </View>
         )}
       />
       <FAB onPress={() => navigation.navigate('AddReminder')} />
-    </View>
+    </ScreenContainer>
   )
 }
