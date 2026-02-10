@@ -19,6 +19,21 @@ export function runMigrations() {
     );
   `)
 
+  const petColumns = db.getAllSync('PRAGMA table_info(pets)') as Array<{ name: string }>
+  const columnNames = new Set(petColumns.map(col => col.name))
+
+  if (!columnNames.has('photo_uri')) {
+    db.execSync('ALTER TABLE pets ADD COLUMN photo_uri TEXT')
+  }
+
+  if (!columnNames.has('traits')) {
+    db.execSync('ALTER TABLE pets ADD COLUMN traits TEXT')
+  }
+
+  if (!columnNames.has('notes')) {
+    db.execSync('ALTER TABLE pets ADD COLUMN notes TEXT')
+  }
+
   createMedicationTable()
   createVaccineTable()
   createReminderTable()
