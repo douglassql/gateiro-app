@@ -21,6 +21,7 @@ import AddVaccineScreen from '../features/vaccines/screens/AddVaccineScreen'
 import EditVaccineScreen from '../features/vaccines/screens/EditVaccineScreen'
 import RemindersListScreen from '../features/reminders/screens/RemindersListScreen'
 import AddReminderScreen from '../features/reminders/screens/AddReminderScreen'
+import EditReminderScreen from '../features/reminders/screens/EditReminderScreen'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 const Tab = createBottomTabNavigator<RootTabParamList>()
@@ -131,6 +132,11 @@ export default function AppNavigator() {
         <Stack.Screen
           name="AddReminder"
           component={AddReminderScreen}
+        />
+
+        <Stack.Screen
+          name="EditReminder"
+          component={EditReminderScreen}
         />
 
       </Stack.Navigator>
