@@ -48,19 +48,30 @@ export default function ConsultationsListScreen() {
         }}
         style={{ marginBottom: 12 }}
       />
-
-      <FlatList
-        data={selectedPetId ? consultations.filter(c => c.pet_id === selectedPetId) : consultations}
+                <View
+                  style={{
+                    marginTop: 8,
+                    alignSelf: 'flex-start',
+                    paddingVertical: 4,
+                    paddingHorizontal: 8,
+                    borderRadius: 12,
+                    backgroundColor: '#FFF',
+                    borderWidth: 1,
+                    borderColor: colors.border
+                  }}
+                >
+                  <Text style={{ color: colors.secondaryText, fontSize: 12 }}>Pet: {pet.name}</Text>
+                </View>
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <View
             style={{
-              padding: 14,
+              <Text style={{ color: colors.secondaryText, marginTop: 10 }} numberOfLines={2}>
               borderRadius: 14,
               borderWidth: 1,
               borderColor: colors.border,
               backgroundColor: colors.card,
-              marginBottom: 12
+            <View style={{ flexDirection: 'row', marginTop: 14 }}>
             }}
           >
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>

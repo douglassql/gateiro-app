@@ -57,18 +57,31 @@ export default function VaccinesListScreen() {
           )
         }}
         style={{ marginBottom: 12 }}
-      />
-
-      <FlatList
+              return pet ? (
+                <View
+                  style={{
+                    marginTop: 8,
+                    alignSelf: 'flex-start',
+                    paddingVertical: 4,
+                    paddingHorizontal: 8,
+                    borderRadius: 12,
+                    backgroundColor: '#FFF',
+                    borderWidth: 1,
+                    borderColor: colors.border
+                  }}
+                >
+                  <Text style={{ color: colors.secondaryText, fontSize: 12 }}>Pet: {pet.name}</Text>
+                </View>
+              ) : null
         data={(selectedPetId
           ? vaccines.filter(v => v.pet_id === selectedPetId)
           : vaccines
-        )
+              <Text style={{ color: colors.secondaryText, marginTop: 10 }} numberOfLines={2}>
           .slice()
           .sort((a, b) => {
             const ad = parseDateSafe(a.next_date)
             const bd = parseDateSafe(b.next_date)
-            if (ad && bd) {
+            <View style={{ flexDirection: 'row', marginTop: 14 }}>
               const diff = ad.getTime() - bd.getTime()
               if (diff !== 0) return diff
               return a.name.localeCompare(b.name)

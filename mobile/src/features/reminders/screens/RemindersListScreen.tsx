@@ -47,11 +47,24 @@ export default function RemindersListScreen() {
             {(() => {
               const pet = pets.find(p => p.id === item.pet_id)
               return pet ? (
-                <Text style={{ color: colors.secondaryText, marginTop: 6 }}>Pet: {pet.name}</Text>
+                <View
+                  style={{
+                    marginTop: 8,
+                    alignSelf: 'flex-start',
+                    paddingVertical: 4,
+                    paddingHorizontal: 8,
+                    borderRadius: 12,
+                    backgroundColor: '#FFF',
+                    borderWidth: 1,
+                    borderColor: colors.border
+                  }}
+                >
+                  <Text style={{ color: colors.secondaryText, fontSize: 12 }}>Pet: {pet.name}</Text>
+                </View>
               ) : null
             })()}
 
-            <View style={{ flexDirection: 'row', marginTop: 12 }}>
+            <View style={{ flexDirection: 'row', marginTop: 14 }}>
               <TouchableOpacity
                 onPress={() => navigation.navigate('EditReminder', { id: item.id! })}
                 style={{
