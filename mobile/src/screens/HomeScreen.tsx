@@ -26,6 +26,7 @@ export default function HomeScreen() {
   const [petCards, setPetCards] = useState<Array<{
     id: number
     name: string
+    photoUri?: string
     vaccines: number
     medications: number
     reminders: number
@@ -69,6 +70,7 @@ export default function HomeScreen() {
       return {
         id: pet.id as number,
         name: pet.name,
+        photoUri: pet.photo_uri ?? undefined,
         vaccines: petVaccines.length,
         medications: petMedications.length,
         reminders: petReminders.length,
@@ -287,7 +289,33 @@ export default function HomeScreen() {
                 }}
               >
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Text style={[typography.subtitle, { marginBottom: 6 }]}>{card.name}</Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    {card.photoUri ? (
+                      <Image
+                        source={{ uri: card.photoUri }}
+                        style={{ width: 32, height: 32, borderRadius: 16, marginRight: 8 }}
+                      />
+                    ) : (
+                      <View
+                        style={{
+                          width: 32,
+                          height: 32,
+                          borderRadius: 16,
+                          backgroundColor: colors.card,
+                          borderWidth: 1,
+                          borderColor: colors.border,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          marginRight: 8
+                        }}
+                      >
+                        <Text style={{ color: colors.primaryText }}>
+                          {card.name.charAt(0).toUpperCase()}
+                        </Text>
+                      </View>
+                    )}
+                    <Text style={[typography.subtitle, { marginBottom: 6 }]}>{card.name}</Text>
+                  </View>
                   <Ionicons name="paw-outline" size={18} color={colors.accentPurple} />
                 </View>
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
