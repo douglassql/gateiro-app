@@ -1,4 +1,4 @@
-import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, Alert, Image } from 'react-native'
 import { usePets } from '../hooks/usePets'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -28,7 +28,28 @@ export default function PetsListScreen() {
         renderItem={({ item }) => (
           <View style={{ padding: 12, borderBottomWidth: 1 }}>
             <TouchableOpacity onPress={() => navigation.navigate('PetDetail', { id: item.id! })} style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Ionicons name="paw-outline" size={18} color={colors.accentPurple} style={{ marginRight: 8 }} />
+              {item.photo_uri ? (
+                <Image
+                  source={{ uri: item.photo_uri }}
+                  style={{ width: 36, height: 36, borderRadius: 18, marginRight: 8 }}
+                />
+              ) : (
+                <View
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 18,
+                    backgroundColor: colors.card,
+                    borderWidth: 1,
+                    borderColor: colors.border,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginRight: 8
+                  }}
+                >
+                  <Text style={{ color: colors.primaryText }}>{item.name.charAt(0).toUpperCase()}</Text>
+                </View>
+              )}
               <Text style={{ fontSize: 16 }}>{item.name}</Text>
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', marginTop: 8 }}>

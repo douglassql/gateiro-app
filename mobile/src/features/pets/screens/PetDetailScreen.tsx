@@ -56,15 +56,31 @@ export default function PetDetailScreen() {
       <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
         <Header icon="paw-outline" title="Perfil do pet" />
 
-        <View style={{ borderRadius: 16, overflow: 'hidden', marginBottom: 12, backgroundColor: colors.card }}>
-          <Image
-            source={{
-              uri: pet.photo_uri
-                ? pet.photo_uri
-                : 'https://images.unsplash.com/photo-1555685812-4b74352c2c0f?q=80&w=800&auto=format&fit=crop'
-            }}
-            style={{ width: '100%', height: 220 }}
-          />
+        <View style={{ alignItems: 'center', marginBottom: 12 }}>
+          {pet.photo_uri ? (
+            <Image
+              source={{ uri: pet.photo_uri }}
+              style={{ width: 140, height: 140, borderRadius: 70, borderWidth: 3, borderColor: colors.card }}
+              resizeMode="cover"
+            />
+          ) : (
+            <View
+              style={{
+                width: 140,
+                height: 140,
+                borderRadius: 70,
+                backgroundColor: colors.card,
+                borderWidth: 2,
+                borderColor: colors.border,
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <Text style={[typography.titleLarge, { color: colors.primaryText }]}>
+                {pet.name.charAt(0).toUpperCase()}
+              </Text>
+            </View>
+          )}
         </View>
 
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -102,31 +118,35 @@ export default function PetDetailScreen() {
         </Text>
 
         <Text style={[typography.subtitle, { marginBottom: 8 }]}>Acessos rapidos</Text>
-        <View style={{ gap: 12 }}>
+        <View>
           <CardButton
             iconName="shield-checkmark-outline"
             title="Vacinas"
             subtitle="Historico e proximas doses"
             onPress={() => navigation.navigate('Vaccines')}
           />
+          <View style={{ height: 12 }} />
           <CardButton
             iconName="medkit-outline"
             title="Medicamentos"
             subtitle="Controle de tratamentos"
             onPress={() => navigation.navigate('Medications')}
           />
+          <View style={{ height: 12 }} />
           <CardButton
             iconName="notifications-outline"
             title="Lembretes"
             subtitle="Rotina e avisos"
             onPress={() => navigation.navigate('Tabs', { screen: 'Reminders' })}
           />
+          <View style={{ height: 12 }} />
           <CardButton
             iconName="restaurant-outline"
             title="Alimentacao"
             subtitle="Controle de racao"
             onPress={() => navigation.navigate('FoodStock')}
           />
+          <View style={{ height: 12 }} />
           <CardButton
             iconName="calendar-outline"
             title="Consultas"
