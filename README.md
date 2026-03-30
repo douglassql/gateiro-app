@@ -135,6 +135,37 @@ A documentação detalhada está organizada em:
 
 ---
 
+## 🏷️ Versionamento
+
+- Padrão adotado: **SemVer** (`vMAJOR.MINOR.PATCH`)
+- Versão atual do app: **v1.0.0**
+
+### Como versionar uma nova release
+
+```bash
+# 1) Atualize a versão no app (ex.: 1.1.0)
+# mobile/package.json e mobile/app.json
+
+# 2) Commit das alterações
+git add .
+git commit -m "chore(release): v1.1.0"
+
+# 3) Crie a tag
+git tag -a v1.1.0 -m "Release v1.1.0"
+
+# 4) Envie commit e tag
+git push origin main
+git push origin v1.1.0
+```
+
+### Boas práticas rápidas
+
+- `PATCH` (`v1.0.1`): correções
+- `MINOR` (`v1.1.0`): novas funcionalidades compatíveis
+- `MAJOR` (`v2.0.0`): mudanças que quebram compatibilidade
+
+---
+
 ## 🤝 Contributing
 
 Para contribuir com o projeto:
