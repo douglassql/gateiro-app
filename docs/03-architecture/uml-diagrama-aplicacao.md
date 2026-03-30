@@ -7,60 +7,65 @@ classDiagram
     direction LR
 
     class MobileApp {
-      <<component>>
-      React Native + TypeScript
+      <<Component>>
+      +stack: React Native
+      +language: TypeScript
     }
 
     class UI {
-      <<component>>
-      Screens e Components
+      <<Component>>
+      +screens: Screen[]
+      +components: Component[]
     }
 
     class Navigation {
-      <<component>>
-      Stack + Tabs
+      <<Component>>
+      +stackNavigator: boolean
+      +bottomTabs: boolean
     }
 
     class Features {
-      <<component>>
-      pets, health, feeding,
-      reminders, content
+      <<Component>>
+      +pets: boolean
+      +health: boolean
+      +feeding: boolean
+      +reminders: boolean
+      +content: boolean
     }
 
     class StateStore {
-      <<component>>
-      Context API / Zustand (futuro)
+      <<Component>>
+      +strategy: Context API
+      +futureStrategy: Zustand
     }
 
     class Services {
-      <<component>>
-      Regras de negócio
-      Casos de uso
+      <<Component>>
+      +businessRules: boolean
+      +useCases: boolean
     }
 
     class LocalDB {
-      <<database>>
-      SQLite
-      pets, vaccines,
-      medications, reminders,
-      food_stock, articles
+      <<Database>>
+      +engine: SQLite
+      +tables: pets,vaccines,medications,reminders,food_stock,articles
     }
 
     class NotificationEngine {
-      <<component>>
-      Expo Notifications
-      agendamento local
+      <<Component>>
+      +provider: Expo Notifications
+      +localScheduling: boolean
     }
 
     class SyncQueue {
-      <<component>>
-      fila de sincronização
-      (futuro)
+      <<Component>>
+      +enabledInMVP: false
     }
 
     class BackendAPI {
-      <<external>>
-      API REST (futuro)
+      <<External>>
+      +type: REST API
+      +enabledInMVP: false
     }
 
     MobileApp --> UI : renderiza
