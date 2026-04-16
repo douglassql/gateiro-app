@@ -176,12 +176,4 @@ Para contribuir com o projeto:
 
 ---
 
-## 📝 Licença
 
-MIT (ou adicionar licença específica do projeto)
-
----
-
-## 👨‍💻 Autor
-
-Desenvolvido com ❤️ para gatos
